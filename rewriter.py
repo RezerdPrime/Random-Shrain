@@ -1,0 +1,11 @@
+f=open('random_shit.txt','r')
+a=str(f.readlines())
+a=a[2:]
+a=a[:-2]
+print(a)
+f=open('random_shit.txt','w')
+s=input()
+j=a+s
+f.write(j)
+print(j)
+f.close()
