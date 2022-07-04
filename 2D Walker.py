@@ -22,8 +22,8 @@ while Repeats == 1:
     gamedata = open('gamedata.txt','w')
     gamedata.write(field)
     gamedata.close()
-    gamedata = open('gamedata.txt').readlines()
-
+    gamedata = open('gamedata.txt').readlines()                  # Field generation
+#---------------------------------------------------------------------------------#
     maxStrcount = 0
     for iStr in range(1,len(gamedata) - 1):
         if ' ' in gamedata[iStr]:
@@ -35,7 +35,7 @@ while Repeats == 1:
     if maxStrcount > 1:
         Repeats = 1
     else: Repeats = 0
-print('Generation successful!\n')       # Field generation and re-generation system
+print('Generation successful!\n')                            # Re-generation system
 #---------------------------------------------------------------------------------#
 place_list = []
 for iY2 in range(len(gamedata)):
