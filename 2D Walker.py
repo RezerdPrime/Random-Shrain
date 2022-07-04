@@ -9,7 +9,6 @@ Repeats = 1
 while Repeats == 1:
     field = '*' * (Xfield + 2) + '\n'
     field_elements = [' ',' ',' ',' ',' ',' ',' ',' ','X','X','*']
-
     if (Xfield < 3) or (Yfield < 3):
         field_elements = [' ','X','*']
 
