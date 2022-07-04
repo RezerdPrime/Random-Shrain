@@ -10,10 +10,13 @@ while Repeats == 1:
     field = '*' * (Xfield + 2) + '\n'
     field_elements = [' ',' ',' ',' ',' ',' ',' ',' ','X','X','*']
 
+    if (Xfield < 3) or (Yfield < 3):
+        field_elements = [' ','X','*']
+
     for iY in range(Yfield):
         field += '*'
         for iX in range(Xfield):
-            field += field_elements[randint(0,10)]
+            field += field_elements[randint(0,len(field_elements)-1)]
         field += '*\n'
     field += '*' * (Xfield + 2)
     
@@ -22,11 +25,18 @@ while Repeats == 1:
     gamedata.close()
     gamedata = open('gamedata.txt').readlines()
 
-    for iStr in range(1,len(gamedata) - 2):
-        if gamedata.count(gamedata[iStr]) > 1:
-            Repeats = 1
-        else: Repeats = 0
-print('\nGeneration successful!\n')     # Field generation and re-generation system
+    maxStrcount = 0
+    for iStr in range(1,len(gamedata) - 1):
+        if ' ' in gamedata[iStr]:
+            maxStrcount = max(maxStrcount,gamedata.count(gamedata[iStr]))
+            print(maxStrcount)
+        else: print(maxStrcount)
+    print('\n')
+
+    if maxStrcount > 1:
+        Repeats = 1
+    else: Repeats = 0
+print('Generation successful!\n')       # Field generation and re-generation system
 #---------------------------------------------------------------------------------#
 place_list = []
 for iY2 in range(len(gamedata)):
@@ -39,7 +49,7 @@ Userpos = place_list[randint(0,len(place_list)-1)]
 for i3 in range(len(Userpos)):
     if Userpos[i3] == '-':
         Xpos = int(Userpos[:i3])
-        Ypos = int(Userpos[i3 + 1:])                            # Random player's pos
+        Ypos = int(Userpos[i3 + 1:])                          # Random player's pos
 #---------------------------------------------------------------------------------#
 Userstr = gamedata[Ypos]
 UserstrNew = ''
