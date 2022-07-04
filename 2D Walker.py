@@ -15,14 +15,14 @@ while Repeats == 1:
         for iX in range(Xfield):
             field += field_elements[randint(0,10)]
         field += '*\n'
-    field += '*' * (Xfield+2)
+    field += '*' * (Xfield + 2)
     
     gamedata = open('gamedata.txt','w')
     gamedata.write(field)
     gamedata.close()
     gamedata = open('gamedata.txt').readlines()
 
-    for iStr in range(1,len(gamedata)-2):
+    for iStr in range(1,len(gamedata) - 2):
         if gamedata.count(gamedata[iStr]) > 1:
             Repeats = 1
         else: Repeats = 0
@@ -34,12 +34,12 @@ for iY2 in range(len(gamedata)):
         if gamedata[iY2][iX2] == ' ':
             place_list.append(str(iX2) + '-' + str(iY2))      # List of free pos'es
 #---------------------------------------------------------------------------------#           
-Xpos=0; Ypos=0
+Xpos = 0; Ypos = 0
 Userpos = place_list[randint(0,len(place_list)-1)]
 for i3 in range(len(Userpos)):
     if Userpos[i3] == '-':
         Xpos = int(Userpos[:i3])
-        Ypos = int(Userpos[i3+1:])                            # Random player's pos
+        Ypos = int(Userpos[i3 + 1:])                            # Random player's pos
 #---------------------------------------------------------------------------------#
 Userstr = gamedata[Ypos]
 UserstrNew = ''
