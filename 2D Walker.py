@@ -1,4 +1,4 @@
-print('1 - (<)\n2 - (>)\n3 - (A)\n4 - (V)\n')
+print(Info := '\n1 - Left\n2 - Right\n3 - Up\n4 - Down\n5 - Up+Left\n6 - Up+Right\n7 - Down+Left\n8 - Down+Right\n')
 Xfield = int(input('Set length of field: '))
 Yfield = int(input('Set height of field: '))
 
@@ -82,11 +82,11 @@ while HP == 1:
 
         str1 = str1.replace('O',' '); str2 = str2.replace('O',' ')
         field = field.replace(UserstrNew,str1 + 'O' + str2,1)
-        print(field)
+        print(Info+'\n'+field)
         gamedataNew = open('gamedataNew.txt','w')
         gamedataNew.write(field)
         gamedataNew.close()
-    elif Move == 1: print(field)                            # (1) Leftward movement
+    elif Move == 1: print(Info+'\n'+field)                  # (1) Leftward movement
 #---------------------------------------------------------------------------------#
     if (Move == 2) and (not('OX' in field)):
         gamedataNew = open('gamedataNew.txt').readlines()
@@ -101,11 +101,11 @@ while HP == 1:
 
         str1 = str1.replace('O',' '); str2 = str2.replace('O',' ')
         field = field.replace(UserstrNew,str1 + 'O' + str2,1)
-        print(field)
+        print(Info+'\n'+field)
         gamedataNew = open('gamedataNew.txt','w')
         gamedataNew.write(field)
         gamedataNew.close()
-    elif Move == 2: print(field)                          # (2) Rightward movenment
+    elif Move == 2: print(Info+'\n'+field)                # (2) Rightward movenment
 #---------------------------------------------------------------------------------#
     if (Move == 3) and (gamedata[Ypos - 1][Xpos] != 'X'):
         gamedataNew = open('gamedataNew.txt').readlines()
@@ -121,11 +121,11 @@ while HP == 1:
             str2 += UserstrNew[i7]
 
         field = field.replace(UserstrNew,str1 + 'O' + str2,1)
-        print(field)
+        print(Info+'\n'+field)
         gamedataNew = open('gamedataNew.txt','w')
         gamedataNew.write(field)
         gamedataNew.close()
-    elif Move == 3: print(field)                             # (3) Upward movenment
+    elif Move == 3: print(Info+'\n'+field)                   # (3) Upward movenment
 #---------------------------------------------------------------------------------#
     if (Move == 4) and (gamedata[Ypos + 1][Xpos] != 'X'):
         gamedataNew = open('gamedataNew.txt').readlines()
@@ -141,13 +141,101 @@ while HP == 1:
             str2 += UserstrNew[i7]
 
         field = field.replace(UserstrNew,str1 + 'O' + str2,1)
-        print(field)
+        print(Info+'\n'+field)
         gamedataNew = open('gamedataNew.txt','w')
         gamedataNew.write(field)
         gamedataNew.close()
-    elif Move == 4: print(field)                           # (4) Downward movenment
+    elif Move == 4: print(Info+'\n'+field)                 # (4) Downward movenment
 #---------------------------------------------------------------------------------#
-    if (Move > 4) or (Move < 1):
+    if (Move == 5) and (gamedata[Ypos - 1][Xpos - 1] != 'X'):
+        gamedataNew = open('gamedataNew.txt').readlines()
+        Ypos -= 1
+        Xpos -= 1
+        UserstrNew = gamedataNew[Ypos]
+        UserstrOld = gamedataNew[Ypos + 1]
+        field = field.replace(UserstrOld,gamedata[Ypos + 1],1)
+        str1 = ''; str2 = ''
+
+        for i6 in range(Xpos):
+            str1 += UserstrNew[i6]
+        for i7 in range(Xpos + 1,len(UserstrNew)):
+            str2 += UserstrNew[i7]
+
+        str1 = str1.replace('O',' '); str2 = str2.replace('O',' ')
+        field = field.replace(UserstrNew,str1 + 'O' + str2,1)
+        print(Info+'\n'+field)
+        gamedataNew = open('gamedataNew.txt','w')
+        gamedataNew.write(field)
+        gamedataNew.close()
+    elif Move == 5: print(Info+'\n'+field)                # (5) "Up+Left" movenment
+#---------------------------------------------------------------------------------#
+    if (Move == 6) and (gamedata[Ypos - 1][Xpos + 1] != 'X'):
+        gamedataNew = open('gamedataNew.txt').readlines()
+        Ypos -= 1
+        Xpos += 1
+        UserstrNew = gamedataNew[Ypos]
+        UserstrOld = gamedataNew[Ypos + 1]
+        field = field.replace(UserstrOld,gamedata[Ypos + 1],1)
+        str1 = ''; str2 = ''
+
+        for i6 in range(Xpos):
+            str1 += UserstrNew[i6]
+        for i7 in range(Xpos + 1,len(UserstrNew)):
+            str2 += UserstrNew[i7]
+
+        str1 = str1.replace('O',' '); str2 = str2.replace('O',' ')
+        field = field.replace(UserstrNew,str1 + 'O' + str2,1)
+        print(Info+'\n'+field)
+        gamedataNew = open('gamedataNew.txt','w')
+        gamedataNew.write(field)
+        gamedataNew.close()
+    elif Move == 6: print(Info+'\n'+field)               # (6) "Up+Right" movenment
+#---------------------------------------------------------------------------------#
+    if (Move == 7) and (gamedata[Ypos + 1][Xpos - 1] != 'X'):
+        gamedataNew = open('gamedataNew.txt').readlines()
+        Ypos += 1
+        Xpos -= 1
+        UserstrNew = gamedataNew[Ypos]
+        UserstrOld = gamedataNew[Ypos - 1]
+        field = field.replace(UserstrOld,gamedata[Ypos - 1],1)
+        str1 = ''; str2 = ''
+
+        for i6 in range(Xpos):
+            str1 += UserstrNew[i6]
+        for i7 in range(Xpos + 1,len(UserstrNew)):
+            str2 += UserstrNew[i7]
+
+        str1 = str1.replace('O',' '); str2 = str2.replace('O',' ')
+        field = field.replace(UserstrNew,str1 + 'O' + str2,1)
+        print(Info+'\n'+field)
+        gamedataNew = open('gamedataNew.txt','w')
+        gamedataNew.write(field)
+        gamedataNew.close()
+    elif Move == 7: print(Info+'\n'+field)              # (7) "Down+Left" movenment
+#---------------------------------------------------------------------------------#
+    if (Move == 8) and (gamedata[Ypos + 1][Xpos + 1] != 'X'):
+        gamedataNew = open('gamedataNew.txt').readlines()
+        Ypos += 1
+        Xpos += 1
+        UserstrNew = gamedataNew[Ypos]
+        UserstrOld = gamedataNew[Ypos - 1]
+        field = field.replace(UserstrOld,gamedata[Ypos - 1],1)
+        str1 = ''; str2 = ''
+
+        for i6 in range(Xpos):
+            str1 += UserstrNew[i6]
+        for i7 in range(Xpos + 1,len(UserstrNew)):
+            str2 += UserstrNew[i7]
+
+        str1 = str1.replace('O',' '); str2 = str2.replace('O',' ')
+        field = field.replace(UserstrNew,str1 + 'O' + str2,1)
+        print(Info+'\n'+field)
+        gamedataNew = open('gamedataNew.txt','w')
+        gamedataNew.write(field)
+        gamedataNew.close()
+    elif Move == 8: print(Info+'\n'+field)             # (8) "Down+Right" movenment
+#---------------------------------------------------------------------------------#
+    if (Move > 8) or (Move < 1):
         print('\nHaha.. no')
         os.remove('gamedata.txt')
         os.remove('gamedataNew.txt')
@@ -158,4 +246,5 @@ while HP == 1:
         print('\nGame Over\nYour HP = 0')
         os.remove('gamedata.txt')
         os.remove('gamedataNew.txt')                      # Condition of game break
-#---------------------------------------------------------------------------------#     By RezerdPrime
+#---------------------------------------------------------------------------------#
+                                                                   # By RezerdPrime
