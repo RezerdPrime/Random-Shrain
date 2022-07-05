@@ -153,7 +153,7 @@ while HP == 1:
         os.remove('gamedataNew.txt')
         break
 
-    if ((open('gamedata.txt').readlines()[Ypos][Xpos] == '*') and (open('gamedataNew.txt').readlines()[Ypos][Xpos] == 'O')) or (open('gamedataNew.txt').readlines()[0].count('O') > 0) or (open('gamedataNew.txt').readlines()[-1].count('O') > 0):
+    if (open('gamedata.txt').readlines()[Ypos][Xpos] == '*') and (open('gamedataNew.txt').readlines()[Ypos][Xpos] == 'O'):
         HP = 0
         print('\nGame Over\nYour HP = 0')
         os.remove('gamedata.txt')
