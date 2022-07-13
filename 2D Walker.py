@@ -67,7 +67,7 @@ gamedataNew.close()                                          # Adding of the pla
 #---------------------------------------------------------------------------------#
 HP = 1
 while HP == 1:
-    Move = int(input('Your move (1-4): '))                 # Condition of game life
+    Move = int(input('Your move (1-8): '))                 # Condition of game life
 #---------------------------------------------------------------------------------#        
     if (Move == 1) and (not('XO' in field)):
         gamedataNew = open('gamedataNew.txt').readlines()
