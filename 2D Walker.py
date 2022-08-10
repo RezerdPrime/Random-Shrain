@@ -27,7 +27,7 @@ while Repeats == 1:
     gamedata = open('gamedata.txt').readlines()                  # Field generation
 #---------------------------------------------------------------------------------#
     maxStrcount = 0
-    for iStr in range(1,len(gamedata) - 1):
+    for iStr in range(1, len(gamedata) - 1):
         if ' ' in gamedata[iStr]:
             maxStrcount = max(maxStrcount, gamedata.count(gamedata[iStr]))
             print(maxStrcount)
@@ -55,7 +55,7 @@ for i3 in range(len(Userpos)):
 #---------------------------------------------------------------------------------#
 Userstr = gamedata[Ypos]
 UserstrNew = ''
-str1 = Userstr[:Xpos]; str2 = Userstr[(Xpos + 1):]
+str1 = Userstr[:Xpos]; str2 = Userstr[Xpos + 1:]
 
 field = field.replace(Userstr, str1 + 'O' + str2)
 gamedataNew = open('gamedataNew.txt', 'w')
@@ -77,9 +77,9 @@ while counter < Condition_of_win:
 #---------------------------------------------------------------------------------#
     gamedataNew = open('gamedataNew.txt').readlines()
     XP_str = gamedataNew[Ypos_xp]
-    str1 = XP_str[:Xpos_xp]; str2 = XP_str[(Xpos_xp + 1):] 
+    str1 = XP_str[:Xpos_xp]; str2 = XP_str[Xpos_xp + 1:] 
 
-    field = field.replace(XP_str,str1 + '1' + str2)
+    field = field.replace(XP_str, str1 + '1' + str2)
     gamedataNew = open('gamedataNew.txt', 'w')
     gamedataNew.write(field)
     gamedataNew.close()
@@ -100,11 +100,11 @@ while HP == 1:
         gamedataNew = open('gamedataNew.txt').readlines()
         Xpos -= 1
         UserstrNew = gamedataNew[Ypos]
-        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[(Xpos + 1):]
+        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[Xpos + 1:]
 
         str1 = str1.replace('O', ' '); str2 = str2.replace('O', ' ')
-        field = field.replace(UserstrNew,str1 + 'O' + str2)
-        print(Info+'\n'+field)
+        field = field.replace(UserstrNew, str1 + 'O' + str2)
+        print(Info + '\n' + field)
         gamedataNew = open('gamedataNew.txt', 'w')
         gamedataNew.write(field)
         gamedataNew.close()
@@ -114,7 +114,7 @@ while HP == 1:
         gamedataNew = open('gamedataNew.txt').readlines()
         Xpos += 1
         UserstrNew = gamedataNew[Ypos]
-        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[(Xpos + 1):]
+        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[Xpos + 1:]
 
         str1 = str1.replace('O', ' '); str2 = str2.replace('O', ' ')
         field = field.replace(UserstrNew, str1 + 'O' + str2)
@@ -130,7 +130,7 @@ while HP == 1:
         UserstrNew = gamedataNew[Ypos]
         UserstrOld = gamedataNew[Ypos + 1]
         field = field.replace(UserstrOld, gamedata[Ypos + 1])
-        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[(Xpos + 1):]
+        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[Xpos + 1:]
 
         field = field.replace(UserstrNew, str1 + 'O' + str2)
         print(Info + '\n' + field)
@@ -145,10 +145,10 @@ while HP == 1:
         UserstrNew = gamedataNew[Ypos]
         UserstrOld = gamedataNew[Ypos - 1]
         field = field.replace(UserstrOld, gamedata[Ypos - 1])
-        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[(Xpos + 1):]
+        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[Xpos + 1:]
 
         field = field.replace(UserstrNew, str1 + 'O' + str2)
-        print(Info+'\n'+field)
+        print(Info + '\n' + field)
         gamedataNew = open('gamedataNew.txt', 'w')
         gamedataNew.write(field)
         gamedataNew.close()
@@ -161,11 +161,11 @@ while HP == 1:
         UserstrNew = gamedataNew[Ypos]
         UserstrOld = gamedataNew[Ypos + 1]
         field = field.replace(UserstrOld, gamedata[Ypos + 1])
-        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[(Xpos + 1):]
+        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[Xpos + 1:]
 
         str1 = str1.replace('O', ' '); str2 = str2.replace('O', ' ')
         field = field.replace(UserstrNew, str1 + 'O' + str2)
-        print(Info+'\n'+field)
+        print(Info + '\n' + field)
         gamedataNew = open('gamedataNew.txt', 'w')
         gamedataNew.write(field)
         gamedataNew.close()
@@ -178,7 +178,7 @@ while HP == 1:
         UserstrNew = gamedataNew[Ypos]
         UserstrOld = gamedataNew[Ypos + 1]
         field = field.replace(UserstrOld, gamedata[Ypos + 1])
-        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[(Xpos + 1):]
+        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[Xpos + 1:]
 
         str1 = str1.replace('O', ' '); str2 = str2.replace('O', ' ')
         field = field.replace(UserstrNew, str1 + 'O' + str2)
@@ -195,7 +195,7 @@ while HP == 1:
         UserstrNew = gamedataNew[Ypos]
         UserstrOld = gamedataNew[Ypos - 1]
         field = field.replace(UserstrOld, gamedata[Ypos - 1])
-        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[(Xpos + 1):]
+        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[Xpos + 1:]
 
         str1 = str1.replace('O', ' '); str2 = str2.replace('O', ' ')
         field = field.replace(UserstrNew, str1 + 'O' + str2)
@@ -212,7 +212,7 @@ while HP == 1:
         UserstrNew = gamedataNew[Ypos]
         UserstrOld = gamedataNew[Ypos - 1]
         field = field.replace(UserstrOld, gamedata[Ypos - 1])
-        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[(Xpos + 1):]
+        str1 = UserstrNew[:Xpos]; str2 = UserstrNew[Xpos + 1:]
 
         str1 = str1.replace('O', ' '); str2 = str2.replace('O', ' ')
         field = field.replace(UserstrNew, str1 + 'O' + str2)
