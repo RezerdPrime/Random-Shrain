@@ -102,7 +102,7 @@ while consoleline != '/exit':
                     if code[i].split()[3] in var_names:
                         value = var_names.index(code[i].split()[3])
                     
-                        if (code[i].split()[2] == 'math:') and (var_types[value] == 'num'): # < op: math: a + b >
+                        if (code[i].split()[2] == 'math:') and (var_types[value] == 'num'):
                             condition = True
                             
                             for j in range(len(code[i].split()[5])):
@@ -130,22 +130,31 @@ while consoleline != '/exit':
                                 if (code[i].split()[4] == '*'):
                                     var_values[value] *= other_number
 
-                                if (code[i].split()[4] == '/'):
-                                    var_values[value] /= other_number
-
                                 if (code[i].split()[4] == '^'):
-                                    var_values[value] **= other_number
+                                        var_values[value] **= other_number
+
+                                if (code[i].split()[4] == '/'):
+
+                                    if code[i].split()[5] != '0':
+                                        var_values[value] /= other_number
+                                    else: print('\n/<Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
 
                                 if (code[i].split()[4] == '//'):
-                                    var_values[value] = float(var_values[value] // other_number)
+
+                                    if code[i].split()[5] != '0':
+                                        var_values[value] = float(var_values[value] // other_number)
+                                    else: print('\n/<Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
 
                                 if (code[i].split()[4] == '%'):
-                                    var_values[value] = float(var_values[value] % other_number)
+                                    
+                                    if code[i].split()[5] != '0':
+                                        var_values[value] = float(var_values[value] % other_number)
+                                    else: print('\n/<Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
 
                             else: print('\n/<Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')
                             
 
-                        elif var_types[var_names.index(code[i].split()[3])] == 'text':
+                        elif (var_types[var_names.index(code[i].split()[3])] == 'text') and (code[i].split()[2] == 'math:'):
                             print('\n/<Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')
                                 
 #/\---------------------------------------------------------------------------------------------------/\# 'op math' function
