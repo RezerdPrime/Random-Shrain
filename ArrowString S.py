@@ -119,7 +119,7 @@ while consoleline != '/exit':
 
                             else: other_number = float(code[i].split()[5])
 
-                            if type(var_values[value]) == other_number:
+                            if type(var_values[value]) == type(other_number):
                                     
                                 if (code[i].split()[4] == '+'):
                                     var_values[value] += other_number
