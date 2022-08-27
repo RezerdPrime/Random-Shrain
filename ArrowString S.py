@@ -1,4 +1,4 @@
-print('Welcome to ArrowString S!\n\n{\n< write: ( Hello World! ) >\n}\n\nUse *help* for more information\n')
+print('Welcome to ArrowString S!\n\n{\n< write: ( Hello`_World! ) >\n}\n\nUse *help* for more information\n')
 code = []; memory = []
 var_names = []; var_values = []; var_types = []
 consoleline = ''; line_counter = 0
