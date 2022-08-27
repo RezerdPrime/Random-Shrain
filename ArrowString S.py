@@ -5,7 +5,7 @@ consoleline = ''; line_counter = 0
 math_supported_symbols = '0123456789.'
 
 while consoleline != '/exit':
-    if '}' not in code: print('-' * 29 + '\n/<Console output: Code mode >/\n')
+    if '}' not in code: print('-' * 30 + '\n/<Console output: Code mode >/\n')
     while '}' not in code:
         line_counter += 1
         line = input(str(line_counter) + '. ')
@@ -35,6 +35,10 @@ while consoleline != '/exit':
         print("'+, -, *, /, ^' - base math operations\n")
         print("'//' - integer division\n")
         print("'%' - residue from division\n")
+        print('\nText operations:\n')
+        print("'add *var* / ( *text* )' - string stacking. It allows to stack 'text' variable with 'num', but not the other way around.\n")
+        print("'rcut *num*' - slicing from the right side.\n")
+        print("'lcut *num*' - slicing from the left side.\n")
 #/\---------------------------------------------------------------------------------------------------/\# Core of the programming language
     for i in range(1, len(code) - 1):
         if ('<' in code[i].split()) and ('>' in code[i].split()):
@@ -62,8 +66,9 @@ while consoleline != '/exit':
                         stringvar = ''
                     
                         for j in range(5, len(code[i].split()) - 2):
-                            stringvar += str(code[i].split()[j]) + ' '
-                        var_values.append(stringvar[:-1])
+                            stringvar += str(code[i].split()[j])
+                        stringvar = stringvar.replace('`_', ' ')
+                        var_values.append(stringvar)
                         var_types.append('text')
 
                     if (code[i].split()[2] in var_names) and (code[i].split()[4] != '(') and (var_values[var_names.index(code[i].split()[2])] == 'num'): # Re-assignment (for numbers)
@@ -75,16 +80,18 @@ while consoleline != '/exit':
                         stringvar = ''
                     
                         for j in range(5, len(code[i].split()) - 2):
-                            stringvar += str(code[i].split()[j]) + ' '
-                        var_values[value] = stringvar[:-1]
+                            stringvar += str(code[i].split()[j])
+                        stringvar = stringvar.replace('`_', ' ')
+                        var_values[value] = stringvar
 #/\---------------------------------------------------------------------------------------------------/\# 'var' function
                 if code[i].split()[1] == 'write:':
             
                     if code[i].split()[2] == '(':
                         stringvar = ''
                         for j in range(3, len(code[i].split()) - 2):
-                            stringvar += str(code[i].split()[j]) + ' '
-                        stringvar = '\n/<Console output: "' + stringvar[:-1] + '" >/\n'
+                            stringvar += str(code[i].split()[j])
+                        stringvar = stringvar.replace('`_', ' ')
+                        stringvar = '\n/<Console output: "' + stringvar + '" >/\n'
                         print(stringvar)
 
                     if code[i].split()[2] != '(':
@@ -121,31 +128,31 @@ while consoleline != '/exit':
 
                             if type(var_values[value]) == type(other_number):
                                     
-                                if (code[i].split()[4] == '+'):
+                                if code[i].split()[4] == '+':
                                     var_values[value] += other_number
 
-                                if (code[i].split()[4] == '-'):
+                                if code[i].split()[4] == '-':
                                     var_values[value] -= other_number
 
-                                if (code[i].split()[4] == '*'):
+                                if code[i].split()[4] == '*':
                                     var_values[value] *= other_number
 
-                                if (code[i].split()[4] == '^'):
+                                if code[i].split()[4] == '^':
                                         var_values[value] **= other_number
 
-                                if (code[i].split()[4] == '/'):
+                                if code[i].split()[4] == '/':
 
                                     if code[i].split()[5] != '0':
                                         var_values[value] /= other_number
                                     else: print('\n/<Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
 
-                                if (code[i].split()[4] == '//'):
+                                if code[i].split()[4] == '//':
 
                                     if code[i].split()[5] != '0':
                                         var_values[value] = float(var_values[value] // other_number)
                                     else: print('\n/<Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
 
-                                if (code[i].split()[4] == '%'):
+                                if code[i].split()[4] == '%':
                                     
                                     if code[i].split()[5] != '0':
                                         var_values[value] = float(var_values[value] % other_number)
@@ -161,13 +168,29 @@ while consoleline != '/exit':
                                 
                         if (code[i].split()[2] == 'text:') and (var_types[value] == 'text'):
 
-                            if (code[i].split()[4] == 'rcut'):
+                            if code[i].split()[4] == 'rcut':
                                 var_values[value] = var_values[value][:int(code[i].split()[5])]
 
-                            if (code[i].split()[4] == 'lcut'):
+                            if code[i].split()[4] == 'lcut':
                                 var_values[value] = var_values[value][int(code[i].split()[5]):]
 
-                        elif (code[i].split()[2] == 'text:') and (var_types[var_names.index(code[i].split()[3])] == 'num'):
+                            if code[i].split()[4] == 'add':
+
+                                if code[i].split()[5] == '(':
+                                    stringvar = ''
+
+                                    for j in range(6, len(code[i].split()) - 2):
+                                        stringvar += str(code[i].split()[j])
+
+                                    stringvar = stringvar.replace('`_', ' ')
+                                    var_values[value] += stringvar
+
+                                elif code[i].split()[5] in var_names:
+                                    var_values[value] += str(var_values[var_names.index(code[i].split()[5])])
+
+                                else: print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
+
+                        elif (code[i].split()[2] == 'text:') and (var_types[value] == 'num'):
                             print('\n/<Console output - event.ERROR: Using a num variable in text operation [Line: ' + str(i + 1) + '] >/\n')
                                 
 
@@ -175,7 +198,7 @@ while consoleline != '/exit':
                     
 #/\---------------------------------------------------------------------------------------------------/\# 'op text' function
     line_counter = 0
-    if '}' in code: print('-' * 32 + '\n/<Console output: Console mode >/\n')
+    if '}' in code: print('-' * 33 + '\n/<Console output: Console mode >/\n')
     consoleline = input()
     
     if consoleline == '/save':
