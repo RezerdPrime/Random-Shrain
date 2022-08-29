@@ -39,6 +39,8 @@ while consoleline != '/exit':
         print("'add *var* / ( *text* )' - string stacking. It allows to stack 'text' variable with 'num', but not the other way around.\n")
         print("'rcut *num*' - slicing from the right side.\n")
         print("'lcut *num*' - slicing from the left side.\n")
+        print("'dub *num*' - duplication of the original value.\n")
+        print("'rep *1st symbol* *2nd symbol*' - replacing symbols.\n")
 #/\---------------------------------------------------------------------------------------------------/\# Core of the programming language
     for i in range(1, len(code) - 1):
         if ('<' in code[i].split()) and ('>' in code[i].split()):
@@ -173,6 +175,12 @@ while consoleline != '/exit':
 
                             if code[i].split()[4] == 'lcut':
                                 var_values[value] = var_values[value][int(code[i].split()[5]):]
+
+                            if code[i].split()[4] == 'dub':
+                                var_values[value] *= int(code[i].split()[5])
+
+                            if code[i].split()[4] == 'rep':
+                                var_values[value] = var_values[value].replace(code[i].split()[5], code[i].split()[6])
 
                             if code[i].split()[4] == 'add':
 
