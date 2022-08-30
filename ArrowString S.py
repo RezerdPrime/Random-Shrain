@@ -151,7 +151,7 @@ while consoleline != '/exit':
                                     var_values[value] *= other_number
 
                                 if code[i].split()[4] == '^':
-                                        var_values[value] **= other_number
+                                    var_values[value] **= other_number
 
                                 if code[i].split()[4] == '/':
 
