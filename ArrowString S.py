@@ -3,6 +3,7 @@ code = []; memory = []
 var_names = []; var_values = []; var_types = []
 consoleline = ''; line_counter = 0
 math_supported_symbols = '0123456789.'
+math_condit_sym = ['|>', '|<', '|=', '|>=', '|<=', '!>', '!<', '!=', '!>=', '!<=']
 
 while consoleline != '/exit':
     if '}' not in code: print('-' * 30 + '\n/<Console output: Code mode >/\n')
@@ -20,6 +21,7 @@ while consoleline != '/exit':
         print("'var:' - assignment function.\n< var: *name* = *value* >\n")
         print("'write:' - output function.\n< write: *var* >\n< write: ( *random text* ) >\n")
         print("'op:' - function for beginning operations (only one operation per line). Has 2 types of arguments.\n< op: math: *var* *math operation* *other var / number* >\n< op: text: *var* *text operations* *other var / text* >\n")
+        print("'if:' - logical function (also only one per line)\n< if: *var* / ( *text* ) *logical operation* *other var* / ( *text* ) >\n< [ >\n< *some code* >\n< ] >\n")
         code[1] = ''
 
     if 'console_help' in code:
@@ -31,16 +33,25 @@ while consoleline != '/exit':
 
     if 'operations_help' in code:
         print('\nhelp | console_help | *operations_help*\n\nOperations:\n')
+        
         print('Mathematic operations:\n')
         print("'+, -, *, /, ^' - base math operations\n")
         print("'//' - integer division\n")
         print("'%' - residue from division\n")
+        
         print('\nText operations:\n')
         print("'add *var* / ( *text* )' - string stacking. It allows to stack 'text' variable with 'num', but not the other way around.\n")
         print("'rcut *num*' - slicing from the right side.\n")
         print("'lcut *num*' - slicing from the left side.\n")
         print("'dub *num*' - duplication of the original value.\n")
         print("'rep *1st symbol* *2nd symbol*' - replacing symbols.\n")
+        
+        print('\nLogical operations:\n')
+        print("'|>' - more than            '!>' - not more ('|<=')\n")
+        print("'|<' - less than            '!<' - not less ('|>=')\n")
+        print("'|=' - equals               '!=' - not equals ('|>' or '|<')\n")
+        print("'|>=' - more or equals      '!>=' - not more and not equals ('|<')\n")
+        print("'|<=' - less or equals      '!<=' - not less and not equals ('|>')\n")
 #/\---------------------------------------------------------------------------------------------------/\# Core of the programming language
     for i in range(1, len(code) - 1):
         if ('<' in code[i].split()) and ('>' in code[i].split()):
@@ -204,7 +215,130 @@ while consoleline != '/exit':
 
                     else: print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
                     
-#/\---------------------------------------------------------------------------------------------------/\# 'op text' function
+#/\---------------------------------------------------------------------------------------------------/\# 'op text' function 
+                    
+                if code[i].split()[1] == 'if:':
+
+                    if ('< [ >' in code) and ('< ] >' in code):
+                        if_begin = i
+                        condition2 = True
+                        var1_is_defined = True; var2_is_defined = True
+                    
+                #--- first var
+                    
+                        condition = True
+                        if len(code[i].split()[:code[i].split().index('>') + 1]) == 6:
+                        
+                            if code[i].split()[2] in var_names:
+                                value = var_names.index(code[i].split()[2])
+                                var1 = var_values[value]
+
+                            else:
+                                for j in range(len(code[i].split()[2])):
+
+                                    if code[i].split()[2][j] not in math_supported_symbols:
+                                        condition = False
+
+                                if condition == True:
+                                    var1 = float(code[i].split()[2])
+
+                                else: print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var1_is_defined = False
+
+                        elif (len(code[i].split()[:code[i].split().index('>') + 1]) >= 8) and (code[i].split()[2] == '('):
+                            stringvar = ''
+                            value = code[i].split().index(')', 1)
+
+                            for j in range(3, value):
+                                stringvar += str(code[i].split()[j])
+
+                            stringvar = stringvar.replace('`_', ' ')
+                            var1 = stringvar
+
+                #--- second var
+                        
+                        condition = True
+                        if len(code[i].split()[:code[i].split().index('>') + 1]) == 6:
+                        
+                            if code[i].split()[4] in var_names:
+                                value = var_names.index(code[i].split()[4])
+                                var2 = var_values[value]
+
+                            else:
+                                for j in range(len(code[i].split()[4])):
+
+                                    if code[i].split()[4][j] not in math_supported_symbols:
+                                        condition = False
+
+                                if condition == True:
+                                    var2 = float(code[i].split()[4])
+
+                                else: print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var2_is_defined = False
+
+                        elif (len(code[i].split()[:code[i].split().index('>') + 1]) >= 8) and (code[i].split()[3:].count('(') == 1):
+                            stringvar = ''
+
+                            for j in range(code[i].split().index('(', 4) + 1, len(code[i].split()) - 2):
+                                stringvar += str(code[i].split()[j])
+
+                            stringvar = stringvar.replace('`_', ' ')
+                            var2 = stringvar
+           
+                #--- logical operations
+
+                        if (var1_is_defined == True) and (var2_is_defined == True):
+
+                            if type(var1) != type(var2): print("\n/<Console output - event.ERROR: Logical operation between num and text vars [Line: " + str(i + 1) + "] >/\n")
+
+                            else:
+                        
+                                if (code[i].split()[3] in math_condit_sym) and (type(var1) == type(var2) == float):
+
+                                    if (code[i].split()[3] == '|>') or (code[i].split()[3] == '!<='):
+                                        if var1 > var2:
+                                            condition2 = True
+                                        else: condition2 = False
+
+                                    if (code[i].split()[3] == '|<') or (code[i].split()[3] == '!>='):
+                                        if var1 < var2:
+                                            condition2 = True
+                                        else: condition2 = False
+
+                                    if code[i].split()[3] == '|=':
+                                        if var1 == var2:
+                                            condition2 = True
+                                        else: condition2 = False
+    
+                                    if code[i].split()[3] == '!=':
+                                        if var1 != var2:
+                                            condition2 = True
+                                        else: condition2 = False
+    
+                                    if (code[i].split()[3] == '|>=') or ((code[i].split()[3] == '!<')):
+                                        if var1 >= var2:
+                                            condition2 = True
+                                        else: condition2 = False
+
+                                    if (code[i].split()[3] == '|<=') or (code[i].split()[3] == '!>'):
+                                        if var1 <= var2:
+                                            condition2 = True
+                                        else: condition2 = False
+
+                                elif type(var1) == type(var2) == str:
+
+                                    if code[i].split()[3] == 'in':
+                                        if var1 in var2:
+                                            condition2 = True
+                                        else: condition2 = False
+
+                                if condition2 == False:
+
+                                    if_end = code.index('< ] >', if_begin)
+                                    for j in range(if_begin + 2, if_end):
+                                        code[j] = code[j][1:]
+                            
+                    else: print("\n/<Console output - event.ERROR: '[' or ']' not found [Line: " + str(i + 1) + "] >/\n")
+                    
+#/\---------------------------------------------------------------------------------------------------/\# 'if' function
     line_counter = 0
     if '}' in code: print('-' * 33 + '\n/<Console output: Console mode >/\n')
     consoleline = input()
