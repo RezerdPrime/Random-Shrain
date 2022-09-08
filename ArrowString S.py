@@ -156,7 +156,7 @@ while consoleline != '/exit':
                                     var_values[value] *= other_number
 
                                 if code[i].split()[4] == '^':
-                                        var_values[value] **= other_number
+                                    var_values[value] **= other_number
 
                                 if code[i].split()[4] == '/':
 
@@ -344,8 +344,8 @@ while consoleline != '/exit':
                                         for j in range(if_begin, if_end):
                                             code[j] = code[j][1:]
                                             
-                        else: print("\n/<Console output - event.ERROR: Invalid syntax1 [Line: " + str(i + 2) + "] >/\n"); break
-                    else: print("\n/<Console output - event.ERROR: Invalid syntax2 [Line: " + str(i + 2) + "] >/\n"); break
+                        else: print("\n/<Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n"); break
+                    else: print("\n/<Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n"); break
                     
 #/\---------------------------------------------------------------------------------------------------/\# 'if' function
     line_counter = 0
