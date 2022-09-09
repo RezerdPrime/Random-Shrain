@@ -6,26 +6,26 @@ math_supported_symbols = '0123456789.'
 math_condit_sym = ['|>', '|<', '|=', '|>=', '|<=', '!>', '!<', '!=', '!>=', '!<=']
 
 while consoleline != '/exit':
-    if '}' not in code: print('-' * 30 + '\n/<Console output: Code mode >/\n')
+    if '}' not in code: print('-' * 31 + '\n/< Console output: Code mode >/\n')
     while '}' not in code:
         line_counter += 1
         line = input(str(line_counter) + '. ')
 
         if ('< ' in line) and ( ' >' in line):
-            line = line[line.index('<'):]; line = line[:line.index('>') + 1]
+            line = line[line.index('< '):]; line = line[:line.index(' >') + 2]
         
         code.append(line)
 
     if code[0] != '{':
-        print("\n/<Console output - event.ERROR: '{' not found [Line: 1] >/\n")
+        print("\n/< Console output - event.ERROR: '{' not found [Line: 1] >/\n")
 
     if 'help' in code:
-        print("\n*help* | console_help | operations_help\n\nEvery program uses '{' & '}' as 'begin' & 'end'\nExecutable lines uses '<' & '>' as in example of code (also as 'begin & 'end')\nYou should to use Space ' ' between variables, functions and any symbols\n")
+        print("\n*help* | console_help | operations_help\n\nEvery program uses '{' & '}' as 'begin' & 'end'\nExecutable lines uses '<' & '>', '[' & ']' as in example of code (also as 'begin & 'end')\nYou should to use Space ' ' between variables, functions and any symbols.\n")
         print("Functions:\n")
-        print("'var:' - assignment function.\n< var: *name* = *value* >\n")
-        print("'write:' - output function.\n< write: *var* >\n< write: ( *random text* ) >\n")
+        print("'var:' - assignment function.\n< var: *name* = *value* >\n< var: *name* = /input_num or /input_text > (input from the keyboard)\n")
+        print("'write:' - output function. It deletes all Spaces. To printing ' ' use '`_' as in example.\n< write: *var* >\n< write: ( *random text* ) >\n")
         print("'op:' - function for beginning operations (only one operation per line). Has 2 types of arguments.\n< op: math: *var* *math operation* *other var / number* >\n< op: text: *var* *text operations* *other var / text* >\n")
-        print("'if:' - logical function (also only one per line)\n< if: *var* / ( *text* ) *logical operation* *other var* / ( *text* ) >\n< [ *num* >\n< *some code* >\n< ] *num* >\n")
+        print("'if:' - logical function (also only one per line)\n< if: *var* / ( *text* ) *logical operation* *other var* / ( *text* ) >\n< [ *identifier* >\n< *some code* >\n< ] *identifier* >\n")
         code[1] = ''
 
     if 'console_help' in code:
@@ -33,7 +33,8 @@ while consoleline != '/exit':
         print("'/save' - save-to-memory function. Remember that the memory is reset each time you re-enter.\n")
         print("'/clear' - clearing function.\n") # How unexpected lmao
         print("'/exit' - out from the program.\n")
-        print("'/write *var* / ( *text* )' - console output function.\n")
+        print("'/write *var* / ( *text* )' - console output function. It deletes all Spaces. To printing ' ' use '`_' as in example.\n")
+        print("'/call var_data / memory' - calls some compiled information.\n")
 
     if 'operations_help' in code:
         print('\nhelp | console_help | *operations_help*\n\nOperations:\n')
@@ -64,21 +65,58 @@ while consoleline != '/exit':
 
                 if code[i].split()[1] == 'var:':
 
-                    if (code[i].split()[4] != '(') and (code[i].split()[2] not in var_names): # Assignment (for numbers)
+                    if (code[i].split()[4] == '/input_num') or (code[i].split()[4] == '/input_text'): # Input num or text var from keyboard
+                        input_var = input("\n/< Console input: ")
+                        print('>/\n')
+
+                        if code[i].split()[2] not in var_names:
+
+                            if code[i].split()[4] == '/input_num': # Assignment (for numbers) (input)
+
+                                sym_in_list = True
+                                for j in range(len(input_var)):
+                                    if input_var[j] not in math_supported_symbols:
+                                        sym_in_list = False
+
+                                if sym_in_list == False: print("\n/< Console output - event.ERROR: Assignment text to a numeric variable [Line: console] >/\n")
+                                else:
+                                    var_names.append(code[i].split()[2])
+                                    var_values.append(float(input_var))
+                                    var_types.append('num')
+
+                            if code[i].split()[4] == '/input_text': # Also assignment (for text) (input)
+
+                                var_names.append(code[i].split()[2])
+                                input_var = input_var.replace(' ', ''); input_var = input_var.replace('`_', ' ')
+                                var_values.append(input_var)
+                                var_types.append('text')
+                            
+                        else:
+                            if (code[i].split()[4] == '/input_num') and (var_types[var_names.index(code[i].split()[2])] == 'num'): # Re-assignment (for numbers) (input)
+                                
+                                value = var_names.index(code[i].split()[2])
+                                var_values[value] = float(input_var)
+
+                            if (code[i].split()[4] == '/input_text') and (var_types[var_names.index(code[i].split()[2])] == 'text'): # Also re-assignment (for text) (input)
+                                
+                                value = var_names.index(code[i].split()[2])
+                                input_var = input_var.replace(' ', ''); input_var = input_var.replace('`_', ' ')
+                                var_values[value] = input_var
+           
+                    if (code[i].split()[4] != '(') and (code[i].split()[4] != '/input_num') and (code[i].split()[4] != '/input_text') and (code[i].split()[2] not in var_names): # Assignment (for numbers)
                         sym_in_list = True
                         for j in range(len(code[i].split()[4])):
 
                             if code[i].split()[4][j] not in math_supported_symbols:
                                 sym_in_list = False
 
-                        if sym_in_list == False:
-                            print("\n/<Console output - event.ERROR: Assignment text to a numeric variable [Line: " + str(i + 1) + "] >/\n")
+                        if sym_in_list == False: print("\n/< Console output - event.ERROR: Assignment text to a numeric variable [Line: " + str(i + 1) + "] >/\n")
 
                         else:
                             var_names.append(code[i].split()[2])
                             var_values.append(float(code[i].split()[4]))
                             var_types.append('num')
-                
+
                     if (code[i].split()[4] == '(') and (code[i].split()[2] not in var_names): # Also assignment (for text)
                         var_names.append(code[i].split()[2])
                         stringvar = ''
@@ -88,12 +126,12 @@ while consoleline != '/exit':
                         stringvar = stringvar.replace('`_', ' ')
                         var_values.append(stringvar)
                         var_types.append('text')
-
-                    if (code[i].split()[2] in var_names) and (code[i].split()[4] != '(') and (var_values[var_names.index(code[i].split()[2])] == 'num'): # Re-assignment (for numbers)
+                        
+                    if (code[i].split()[2] in var_names) and (code[i].split()[4] != '(') and (code[i].split()[4] != '/input_num') and (code[i].split()[4] != '/input_text') and (var_types[var_names.index(code[i].split()[2])] == 'num'): # Re-assignment (for numbers)
                         value = var_names.index(code[i].split()[2])
                         var_values[value] = float(code[i].split()[4])
 
-                    if (code[i].split()[2] in var_names) and (code[i].split()[4] == '(') and (var_values[var_names.index(code[i].split()[2])] == 'text'): # Also re-assignment (for text)
+                    if (code[i].split()[2] in var_names) and (code[i].split()[4] == '(') and (var_types[var_names.index(code[i].split()[2])] == 'text'): # Also re-assignment (for text)
                         value = var_names.index(code[i].split()[2])
                         stringvar = ''
                     
@@ -109,17 +147,17 @@ while consoleline != '/exit':
                         for j in range(3, len(code[i].split()) - 2):
                             stringvar += str(code[i].split()[j])
                         stringvar = stringvar.replace('`_', ' ')
-                        stringvar = '\n/<Console output: "' + stringvar + '" >/\n'
+                        stringvar = '\n/< Console output: "' + stringvar + '" >/\n'
                         print(stringvar)
 
                     if code[i].split()[2] != '(':
 
                         if code[i].split()[2] not in var_names:
-                            print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
+                            print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
                             
                         else:
                             value = var_names.index(code[i].split()[2])
-                            stringvar = '\n/<Console output: "' + str(var_values[value]) + '" >/\n'
+                            stringvar = '\n/< Console output: "' + str(var_values[value]) + '" >/\n'
                             print(stringvar)
 #/\---------------------------------------------------------------------------------------------------/\# 'write' function
                 if code[i].split()[1] == 'op:':
@@ -140,7 +178,7 @@ while consoleline != '/exit':
                                 if code[i].split()[5] in var_names:
                                     other_number = var_values[var_names.index(code[i].split()[5])]
                                         
-                                else: print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
+                                else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
 
                             else: other_number = float(code[i].split()[5])
 
@@ -156,31 +194,31 @@ while consoleline != '/exit':
                                     var_values[value] *= other_number
 
                                 if code[i].split()[4] == '^':
-                                    var_values[value] **= other_number
+                                        var_values[value] **= other_number
 
                                 if code[i].split()[4] == '/':
 
                                     if code[i].split()[5] != '0':
                                         var_values[value] /= other_number
-                                    else: print('\n/<Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
+                                    else: print('\n/< Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
 
                                 if code[i].split()[4] == '//':
 
                                     if code[i].split()[5] != '0':
                                         var_values[value] = float(var_values[value] // other_number)
-                                    else: print('\n/<Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
+                                    else: print('\n/< Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
 
                                 if code[i].split()[4] == '%':
                                     
                                     if code[i].split()[5] != '0':
                                         var_values[value] = float(var_values[value] % other_number)
-                                    else: print('\n/<Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
+                                    else: print('\n/< Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
 
-                            else: print('\n/<Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')
+                            else: print('\n/< Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')
                             
 
                         elif (var_types[var_names.index(code[i].split()[3])] == 'text') and (code[i].split()[2] == 'math:'):
-                            print('\n/<Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')
+                            print('\n/< Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')
                                 
 #/\---------------------------------------------------------------------------------------------------/\# 'op math' function
                                 
@@ -212,31 +250,31 @@ while consoleline != '/exit':
                                 elif code[i].split()[5] in var_names:
                                     var_values[value] += str(var_values[var_names.index(code[i].split()[5])])
 
-                                else: print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
+                                else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
 
                         elif (code[i].split()[2] == 'text:') and (var_types[value] == 'num'):
-                            print('\n/<Console output - event.ERROR: Using a num variable in text operation [Line: ' + str(i + 1) + '] >/\n')
+                            print('\n/< Console output - event.ERROR: Using a num variable in text operation [Line: ' + str(i + 1) + '] >/\n')
                                 
 
-                    else: print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
+                    else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
                     
 #/\---------------------------------------------------------------------------------------------------/\# 'op text' function 
                     
-                if code[i].split()[1] == 'if:': # < [ 1 >
+                if code[i].split()[1] == 'if:':
 
-                    if (len(code[i + 1].split()) == 4) and (code[i + 1].split()[1] == '[') and (code[i + 1].split()[2] in math_supported_symbols[:-1]):
-                        if_op_num = code[i + 1].split()[2]
+                    if (len(code[i + 1].split()) == 4) and (code[i + 1].split()[1] == '['):
+                        if_op_id = code[i + 1].split()[2]
                     
-                        if ('< ] ' + if_op_num + ' >') in code:
-                            if_begin = code.index('< [ ' + if_op_num + ' >')
-                            if_end = code.index('< ] ' + if_op_num + ' >', if_begin)
+                        if ('< ] ' + if_op_id + ' >') in code:
+                            if_begin = code.index('< [ ' + if_op_id + ' >') + 1
+                            if_end = code.index('< ] ' + if_op_id + ' >', if_begin)
                             condition2 = True
                             var1_is_defined = True; var2_is_defined = True
                     
                 #--- first var
                     
                             condition = True
-                            if len(code[i].split()[:code[i].split().index('>') + 1]) == 6:
+                            if len(code[i].split()) == 6:
                         
                                 if code[i].split()[2] in var_names:
                                     value = var_names.index(code[i].split()[2])
@@ -251,7 +289,7 @@ while consoleline != '/exit':
                                     if condition == True:
                                         var1 = float(code[i].split()[2])
 
-                                    else: print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var1_is_defined = False
+                                    else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var1_is_defined = False
 
                             elif (len(code[i].split()[:code[i].split().index('>') + 1]) >= 8) and (code[i].split()[2] == '('):
                                 stringvar = ''
@@ -266,7 +304,7 @@ while consoleline != '/exit':
                 #--- second var
                         
                             condition = True
-                            if len(code[i].split()[:code[i].split().index('>') + 1]) == 6:
+                            if len(code[i].split()) == 6:
                         
                                 if code[i].split()[4] in var_names:
                                     value = var_names.index(code[i].split()[4])
@@ -281,7 +319,7 @@ while consoleline != '/exit':
                                     if condition == True:
                                         var2 = float(code[i].split()[4])
 
-                                    else: print('\n/<Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var2_is_defined = False
+                                    else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var2_is_defined = False
 
                             elif (len(code[i].split()[:code[i].split().index('>') + 1]) >= 8) and (code[i].split()[3:].count('(') == 1):
                                 stringvar = ''
@@ -296,7 +334,7 @@ while consoleline != '/exit':
 
                             if (var1_is_defined == True) and (var2_is_defined == True):
 
-                                if type(var1) != type(var2): print("\n/<Console output - event.ERROR: Logical operation between num and text vars [Line: " + str(i + 1) + "] >/\n")
+                                if type(var1) != type(var2): print("\n/< Console output - event.ERROR: Logical operation between num and text vars [Line: " + str(i + 1) + "] >/\n")
 
                                 else:
                         
@@ -344,39 +382,59 @@ while consoleline != '/exit':
                                         for j in range(if_begin, if_end):
                                             code[j] = code[j][1:]
                                             
-                        else: print("\n/<Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n"); break
-                    else: print("\n/<Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n"); break
+                        else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n"); break
+                    else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n"); break
                     
 #/\---------------------------------------------------------------------------------------------------/\# 'if' function
     line_counter = 0
-    if '}' in code: print('-' * 33 + '\n/<Console output: Console mode >/\n')
-    consoleline = input()
+    if '}' in code: print('-' * 34 + '\n/< Console output: Console mode >/\n')
+    consoleline = input('>> ')
     
     if consoleline == '/save':
         memory.append(code)
-        print('\n/<Console output: Saved successfully >/\n')
+        print('\n/< Console output: Saved successfully >/\n')
 
     code = []; code.append('{'); code.append('}')
 
-    if consoleline.split()[0] == '/write':
-        stringvar = ''
+    if len(consoleline.split()) > 1:
 
-        if consoleline.split()[1] != '(':
+        if consoleline.split()[0] == '/write':
+            stringvar = ''
 
-            if code[i].split()[2] not in var_names:
-                print('\n/<Console output - event.ERROR: Variable is not defined >/\n')
+            if consoleline.split()[1] != '(':
 
-            else:
-                value = var_names.index(consoleline.split()[1])
-                stringvar = '\n/<Console output: "' + str(var_values[value]) + '" >/\n'
-                print(stringvar)
+                if consoleline.split()[1] not in var_names:
+                    print('\n/< Console output - event.ERROR: Variable is not defined >/\n')
+
+                else:
+                    value = var_names.index(consoleline.split()[1])
+                    stringvar = '\n/< Console output: "' + str(var_values[value]) + '" >/\n'
+                    print(stringvar)
             
-        if consoleline.split()[1] == '(':
-            for j in range(2, len(consoleline.split()) - 1):
-                stringvar += str(consoleline.split()[j]) + ' '
-            stringvar = '\n/<Console output: "' + stringvar[:-1] + '" >/\n'
-            print(stringvar)
+            if consoleline.split()[1] == '(':
+                for j in range(2, len(consoleline.split()) - 1):
+                    stringvar += str(consoleline.split()[j]) + ' '
+                stringvar = stringvar.replace(' ', ''); stringvar = stringvar.replace('`_', ' ')
+                stringvar = '\n/< Console output: "' + stringvar + '" >/\n'
+                print(stringvar)
 
+        if consoleline.split()[0] == '/call':
+
+            if consoleline.split()[1] == 'var_data':
+
+                if memory != []:
+                
+                    print('\n')
+                    for i in range(len(var_names)):
+                        print('Var name:', var_names[i], '| Var value:', var_values[i], '| Var type:', var_types[i], sep = ' ')
+                    print('\n')
+
+                else: print('\n/< Console output: Memory is empty >/\n')
+
+            if consoleline.split()[1] == 'memory':
+                print('\n'); print(memory); print('\n')
+                
     if consoleline == '/clear':
         code = []; var_names = []; var_values = []; var_types = []
-        print('\n/<Console output: Cleared successfully >/\n')
+        print('\n/< Console output: Cleared successfully >/\n')
+#/\---------------------------------------------------------------------------------------------------/\# Console commands
