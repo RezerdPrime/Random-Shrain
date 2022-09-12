@@ -2,7 +2,7 @@ import sys
 sys.setrecursionlimit(10000)
 
 print('Welcome to ArrowString S!\n\n{\n< write: ( Hello`_World! ) >\n}\n\nUse *help* for more information\n')
-code = reserve = []; memory = []
+code = []; memory = []
 var_names = []; var_values = []; var_types = []
 consoleline = ''; line_counter = op_sym = var1 = var2 = important_shit = 0
 math_supported_symbols = '0123456789.'
@@ -337,18 +337,18 @@ while consoleline != '/exit':
                 condition = True
                 if len(condit_line[op_sym:]) == 3:
                         
-                    if condit_line[4] in var_names:
-                        value = var_names.index(condit_line[4])
+                    if condit_line[op_sym:][1] in var_names:
+                        value = var_names.index(condit_line[op_sym:][1])
                         var2 = var_values[value]
 
                     else:
-                        for j in range(len(condit_line[4])):
+                        for j in range(len(condit_line[op_sym:][1])):
 
-                            if condit_line[4][j] not in math_supported_symbols:
+                            if condit_line[op_sym:][1][j] not in math_supported_symbols:
                                 condition = False
 
                         if condition == True:
-                            var2 = float(condit_line[4])
+                            var2 = float(condit_line[op_sym:][1])
 
                         else: print('\n/< Console output - event.ERROR: Variable2 is not defined [Line: ' + str(i + 1) + '] >/\n'); var2_is_defined = False
 
@@ -424,7 +424,7 @@ while consoleline != '/exit':
                              while important_shit == 0:
                                   line_check_begin(if_begin, if_end)
                                   condition_check(4)
-                                          
+
             else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n")
 
         condition_check(4)                
@@ -438,7 +438,7 @@ while consoleline != '/exit':
         memory.append(code)
         print('\n/< Console output: Saved successfully >/\n')
 
-    code = []; code.append('{'); code.append('}')
+    code = ['{','}']
 
     if len(consoleline.split()) > 1:
 
@@ -472,7 +472,7 @@ while consoleline != '/exit':
 
             if consoleline.split()[1] == 'var_data':
 
-                if memory != []:
+                if var_names != var_values != var_types != []:
                 
                     print('\n')
                     for i in range(len(var_names)):
