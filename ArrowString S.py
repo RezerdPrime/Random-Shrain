@@ -1,9 +1,9 @@
 print('Welcome to ArrowString S!\n\n{\n< write: ( Hello`_World! ) >\n}\n\nUse *help* for more information\n')
-code = []; memory = []
+code = reserve = []; memory = []
 var_names = []; var_values = []; var_types = []
 consoleline = ''; line_counter = 0
 math_supported_symbols = '0123456789.'
-math_condit_sym = ['|>', '|<', '|=', '|>=', '|<=', '!>', '!<', '!=', '!>=', '!<=']
+math_condit_sym = ['|>', '|<', '|=', '|>=', '|<=', '!>', '!<', '!=', '!>=', '!<=']; condit_op = math_condit_sym + ['in', 'not_in']
 
 while consoleline != '/exit':
     if '}' not in code: print('-' * 31 + '\n/< Console output: Code mode >/\n')
@@ -57,335 +57,375 @@ while consoleline != '/exit':
         print("'|=' - equals               '!=' - not equals ('|>' or '|<')\n")
         print("'|>=' - more or equals      '!>=' - not more and not equals ('|<')\n")
         print("'|<=' - less or equals      '!<=' - not less and not equals ('|>')\n")
+
 #/\---------------------------------------------------------------------------------------------------/\# Core of the programming language
-    for i in range(1, len(code) - 1):
-        
-        if ('<' in code[i].split()) and ('>' in code[i].split()):
-            if (code[i].split()[0] == '<') or (code[i].split()[-1] == '>'):
+    def line_check(function):
+     global code, i, var1, var2
+     
+     if function == 1: #'var:'
 
-                if code[i].split()[1] == 'var:':
+        if (code[i].split()[4] == '/input_num') or (code[i].split()[4] == '/input_text'): # Input num or text var from keyboard
+            input_var = input("\n/< Console input: ")
+            print('>/\n')
 
-                    if (code[i].split()[4] == '/input_num') or (code[i].split()[4] == '/input_text'): # Input num or text var from keyboard
-                        input_var = input("\n/< Console input: ")
-                        print('>/\n')
+            if code[i].split()[2] not in var_names:
 
-                        if code[i].split()[2] not in var_names:
+                if code[i].split()[4] == '/input_num': # Assignment (for numbers) (input)
 
-                            if code[i].split()[4] == '/input_num': # Assignment (for numbers) (input)
+                    sym_in_list = True
+                    for j in range(len(input_var)):
+                        if input_var[j] not in math_supported_symbols:
+                            sym_in_list = False
 
-                                sym_in_list = True
-                                for j in range(len(input_var)):
-                                    if input_var[j] not in math_supported_symbols:
-                                        sym_in_list = False
-
-                                if sym_in_list == False: print("\n/< Console output - event.ERROR: Assignment text to a numeric variable [Line: console] >/\n")
-                                else:
-                                    var_names.append(code[i].split()[2])
-                                    var_values.append(float(input_var))
-                                    var_types.append('num')
-
-                            if code[i].split()[4] == '/input_text': # Also assignment (for text) (input)
-
-                                var_names.append(code[i].split()[2])
-                                input_var = input_var.replace(' ', ''); input_var = input_var.replace('`_', ' ')
-                                var_values.append(input_var)
-                                var_types.append('text')
-                            
-                        else:
-                            if (code[i].split()[4] == '/input_num') and (var_types[var_names.index(code[i].split()[2])] == 'num'): # Re-assignment (for numbers) (input)
-                                
-                                value = var_names.index(code[i].split()[2])
-                                var_values[value] = float(input_var)
-
-                            if (code[i].split()[4] == '/input_text') and (var_types[var_names.index(code[i].split()[2])] == 'text'): # Also re-assignment (for text) (input)
-                                
-                                value = var_names.index(code[i].split()[2])
-                                input_var = input_var.replace(' ', ''); input_var = input_var.replace('`_', ' ')
-                                var_values[value] = input_var
-           
-                    if (code[i].split()[4] != '(') and (code[i].split()[4] != '/input_num') and (code[i].split()[4] != '/input_text') and (code[i].split()[2] not in var_names): # Assignment (for numbers)
-                        sym_in_list = True
-                        for j in range(len(code[i].split()[4])):
-
-                            if code[i].split()[4][j] not in math_supported_symbols:
-                                sym_in_list = False
-
-                        if sym_in_list == False: print("\n/< Console output - event.ERROR: Assignment text to a numeric variable [Line: " + str(i + 1) + "] >/\n")
-
-                        else:
-                            var_names.append(code[i].split()[2])
-                            var_values.append(float(code[i].split()[4]))
-                            var_types.append('num')
-
-                    if (code[i].split()[4] == '(') and (code[i].split()[2] not in var_names): # Also assignment (for text)
+                    if sym_in_list == False: print("\n/< Console output - event.ERROR: Assignment text to a numeric variable [Line: console] >/\n")
+                    else:
                         var_names.append(code[i].split()[2])
-                        stringvar = ''
-                    
-                        for j in range(5, len(code[i].split()) - 2):
-                            stringvar += str(code[i].split()[j])
-                        stringvar = stringvar.replace('`_', ' ')
-                        var_values.append(stringvar)
-                        var_types.append('text')
-                        
-                    if (code[i].split()[2] in var_names) and (code[i].split()[4] != '(') and (code[i].split()[4] != '/input_num') and (code[i].split()[4] != '/input_text') and (var_types[var_names.index(code[i].split()[2])] == 'num'): # Re-assignment (for numbers)
-                        value = var_names.index(code[i].split()[2])
-                        var_values[value] = float(code[i].split()[4])
+                        var_values.append(float(input_var))
+                        var_types.append('num')
 
-                    if (code[i].split()[2] in var_names) and (code[i].split()[4] == '(') and (var_types[var_names.index(code[i].split()[2])] == 'text'): # Also re-assignment (for text)
-                        value = var_names.index(code[i].split()[2])
-                        stringvar = ''
-                    
-                        for j in range(5, len(code[i].split()) - 2):
-                            stringvar += str(code[i].split()[j])
-                        stringvar = stringvar.replace('`_', ' ')
-                        var_values[value] = stringvar
-#/\---------------------------------------------------------------------------------------------------/\# 'var' function
-                if code[i].split()[1] == 'write:':
-            
-                    if code[i].split()[2] == '(':
-                        stringvar = ''
-                        for j in range(3, len(code[i].split()) - 2):
-                            stringvar += str(code[i].split()[j])
-                        stringvar = stringvar.replace('`_', ' ')
-                        stringvar = '\n/< Console output: "' + stringvar + '" >/\n'
-                        print(stringvar)
+                if code[i].split()[4] == '/input_text': # Also assignment (for text) (input)
 
-                    if code[i].split()[2] != '(':
-
-                        if code[i].split()[2] not in var_names:
-                            print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
+                    var_names.append(code[i].split()[2])
+                    input_var = input_var.replace(' ', ''); input_var = input_var.replace('`_', ' ')
+                    var_values.append(input_var)
+                    var_types.append('text')
                             
-                        else:
-                            value = var_names.index(code[i].split()[2])
-                            stringvar = '\n/< Console output: "' + str(var_values[value]) + '" >/\n'
-                            print(stringvar)
-#/\---------------------------------------------------------------------------------------------------/\# 'write' function
-                if code[i].split()[1] == 'op:':
-
-                    if code[i].split()[3] in var_names:
-                        value = var_names.index(code[i].split()[3])
-                    
-                        if (code[i].split()[2] == 'math:') and (var_types[value] == 'num'):
-                            condition = True
-                            
-                            for j in range(len(code[i].split()[5])):
-
-                                if code[i].split()[5][j] not in math_supported_symbols:
-                                    condition = False
-                                    
-                            if condition == False:
+            else:
+                if (code[i].split()[4] == '/input_num') and (var_types[var_names.index(code[i].split()[2])] == 'num'): # Re-assignment (for numbers) (input)
                                 
-                                if code[i].split()[5] in var_names:
-                                    other_number = var_values[var_names.index(code[i].split()[5])]
-                                        
-                                else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
+                    value = var_names.index(code[i].split()[2])
+                    var_values[value] = float(input_var)
 
-                            else: other_number = float(code[i].split()[5])
+                if (code[i].split()[4] == '/input_text') and (var_types[var_names.index(code[i].split()[2])] == 'text'): # Also re-assignment (for text) (input)
+                                
+                    value = var_names.index(code[i].split()[2])
+                    input_var = input_var.replace(' ', ''); input_var = input_var.replace('`_', ' ')
+                    var_values[value] = input_var
+           
+        if (code[i].split()[4] != '(') and (code[i].split()[4] != '/input_num') and (code[i].split()[4] != '/input_text') and (code[i].split()[2] not in var_names): # Assignment (for numbers)
+            sym_in_list = True
+            for j in range(len(code[i].split()[4])):
 
-                            if type(var_values[value]) == type(other_number):
-                                    
-                                if code[i].split()[4] == '+':
-                                    var_values[value] += other_number
+                if code[i].split()[4][j] not in math_supported_symbols:
+                    sym_in_list = False
 
-                                if code[i].split()[4] == '-':
-                                    var_values[value] -= other_number
+            if sym_in_list == False: print("\n/< Console output - event.ERROR: Assignment text to a numeric variable [Line: " + str(i + 1) + "] >/\n")
 
-                                if code[i].split()[4] == '*':
-                                    var_values[value] *= other_number
+            else:
+                var_names.append(code[i].split()[2])
+                var_values.append(float(code[i].split()[4]))
+                var_types.append('num')
 
-                                if code[i].split()[4] == '^':
-                                        var_values[value] **= other_number
+        if (code[i].split()[4] == '(') and (code[i].split()[2] not in var_names): # Also assignment (for text)
+            var_names.append(code[i].split()[2])
+            stringvar = ''
+                    
+            for j in range(5, len(code[i].split()) - 2):
+                stringvar += str(code[i].split()[j])
+            stringvar = stringvar.replace('`_', ' ')
+            var_values.append(stringvar)
+            var_types.append('text')
+                        
+        if (code[i].split()[2] in var_names) and (code[i].split()[4] != '(') and (code[i].split()[4] != '/input_num') and (code[i].split()[4] != '/input_text') and (var_types[var_names.index(code[i].split()[2])] == 'num'): # Re-assignment (for numbers)
+            value = var_names.index(code[i].split()[2])
+            var_values[value] = float(code[i].split()[4])
 
-                                if code[i].split()[4] == '/':
+        if (code[i].split()[2] in var_names) and (code[i].split()[4] == '(') and (var_types[var_names.index(code[i].split()[2])] == 'text'): # Also re-assignment (for text)
+            value = var_names.index(code[i].split()[2])
+            stringvar = ''
+                    
+            for j in range(5, len(code[i].split()) - 2):
+                stringvar += str(code[i].split()[j])
+            stringvar = stringvar.replace('`_', ' ')
+            var_values[value] = stringvar
+#/\---------------------------------------------------------------------------------------------------/\# 'var' function
 
-                                    if code[i].split()[5] != '0':
-                                        var_values[value] /= other_number
-                                    else: print('\n/< Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
+     if function == 2: #'write:'
+            
+        if code[i].split()[2] == '(':
+            stringvar = ''
+            for j in range(3, len(code[i].split()) - 2):
+                stringvar += str(code[i].split()[j])
+            stringvar = stringvar.replace('`_', ' ')
+            stringvar = '\n/< Console output: "' + stringvar + '" >/\n'
+            print(stringvar)
 
-                                if code[i].split()[4] == '//':
+        if code[i].split()[2] != '(':
 
-                                    if code[i].split()[5] != '0':
-                                        var_values[value] = float(var_values[value] // other_number)
-                                    else: print('\n/< Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
-
-                                if code[i].split()[4] == '%':
-                                    
-                                    if code[i].split()[5] != '0':
-                                        var_values[value] = float(var_values[value] % other_number)
-                                    else: print('\n/< Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
-
-                            else: print('\n/< Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')
+            if code[i].split()[2] not in var_names:
+                print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
                             
+            else:
+                value = var_names.index(code[i].split()[2])
+                stringvar = '\n/< Console output: "' + str(var_values[value]) + '" >/\n'
+                print(stringvar)
+#/\---------------------------------------------------------------------------------------------------/\# 'write' function
 
-                        elif (var_types[var_names.index(code[i].split()[3])] == 'text') and (code[i].split()[2] == 'math:'):
-                            print('\n/< Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')
+     if function == 3: #'op:'
+
+        if code[i].split()[3] in var_names:
+            value = var_names.index(code[i].split()[3])
+                    
+            if (code[i].split()[2] == 'math:') and (var_types[value] == 'num'):
+                condition = True
+                            
+                for j in range(len(code[i].split()[5])):
+
+                    if code[i].split()[5][j] not in math_supported_symbols:
+                        condition = False
+                                    
+                if condition == False:
+                                
+                    if code[i].split()[5] in var_names:
+                        other_number = var_values[var_names.index(code[i].split()[5])]
+                                        
+                    else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
+
+                else: other_number = float(code[i].split()[5])
+
+                if type(var_values[value]) == type(other_number):
+                                    
+                    if code[i].split()[4] == '+':
+                        var_values[value] += other_number
+
+                    if code[i].split()[4] == '-':
+                        var_values[value] -= other_number
+
+                    if code[i].split()[4] == '*':
+                        var_values[value] *= other_number
+
+                    if code[i].split()[4] == '^':
+                            var_values[value] **= other_number
+
+                    if code[i].split()[4] == '/':
+
+                        if code[i].split()[5] != '0':
+                            var_values[value] /= other_number
+                        else: print('\n/< Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
+
+                    if code[i].split()[4] == '//':
+
+                        if code[i].split()[5] != '0':
+                            var_values[value] = float(var_values[value] // other_number)
+                        else: print('\n/< Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
+
+                    if code[i].split()[4] == '%':
+                                    
+                        if code[i].split()[5] != '0':
+                            var_values[value] = float(var_values[value] % other_number)
+                        else: print('\n/< Console output - event.ERROR: Dividing by zero [Line: ' + str(i + 1) + '] >/\n')
+
+                else: print('\n/< Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')                    
+
+            elif (var_types[var_names.index(code[i].split()[3])] == 'text') and (code[i].split()[2] == 'math:'):
+                print('\n/< Console output - event.ERROR: Using a text variable in math operation [Line: ' + str(i + 1) + '] >/\n')
                                 
 #/\---------------------------------------------------------------------------------------------------/\# 'op math' function
                                 
-                        if (code[i].split()[2] == 'text:') and (var_types[value] == 'text'):
+            if (code[i].split()[2] == 'text:') and (var_types[value] == 'text'):
 
-                            if code[i].split()[4] == 'rcut':
-                                var_values[value] = var_values[value][:int(code[i].split()[5])]
+                if code[i].split()[4] == 'rcut':
+                    var_values[value] = var_values[value][:int(code[i].split()[5])]
 
-                            if code[i].split()[4] == 'lcut':
-                                var_values[value] = var_values[value][int(code[i].split()[5]):]
+                if code[i].split()[4] == 'lcut':
+                    var_values[value] = var_values[value][int(code[i].split()[5]):]
 
-                            if code[i].split()[4] == 'dub':
-                                var_values[value] *= int(code[i].split()[5])
+                if code[i].split()[4] == 'dub':
+                    var_values[value] *= int(code[i].split()[5])
 
-                            if code[i].split()[4] == 'rep':
-                                var_values[value] = var_values[value].replace(code[i].split()[5], code[i].split()[6])
+                if code[i].split()[4] == 'rep':
+                    var_values[value] = var_values[value].replace(code[i].split()[5], code[i].split()[6])
 
-                            if code[i].split()[4] == 'add':
+                if code[i].split()[4] == 'add':
 
-                                if code[i].split()[5] == '(':
-                                    stringvar = ''
+                    if code[i].split()[5] == '(':
+                        stringvar = ''
 
-                                    for j in range(6, len(code[i].split()) - 2):
-                                        stringvar += str(code[i].split()[j])
+                        for j in range(6, len(code[i].split()) - 2):
+                            stringvar += str(code[i].split()[j])
 
-                                    stringvar = stringvar.replace('`_', ' ')
-                                    var_values[value] += stringvar
+                        stringvar = stringvar.replace('`_', ' ')
+                        var_values[value] += stringvar
 
-                                elif code[i].split()[5] in var_names:
-                                    var_values[value] += str(var_values[var_names.index(code[i].split()[5])])
-
-                                else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
-
-                        elif (code[i].split()[2] == 'text:') and (var_types[value] == 'num'):
-                            print('\n/< Console output - event.ERROR: Using a num variable in text operation [Line: ' + str(i + 1) + '] >/\n')
-                                
+                    elif code[i].split()[5] in var_names:
+                        var_values[value] += str(var_values[var_names.index(code[i].split()[5])])
 
                     else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
-                    
-#/\---------------------------------------------------------------------------------------------------/\# 'op text' function 
-                    
-                if code[i].split()[1] == 'if:':
 
-                    if (len(code[i + 1].split()) == 4) and (code[i + 1].split()[1] == '['):
-                        if_op_id = code[i + 1].split()[2]
+            elif (code[i].split()[2] == 'text:') and (var_types[value] == 'num'):
+                print('\n/< Console output - event.ERROR: Using a num variable in text operation [Line: ' + str(i + 1) + '] >/\n')
+                                
+        else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
                     
-                        if ('< ] ' + if_op_id + ' >') in code:
-                            if_begin = code.index('< [ ' + if_op_id + ' >') + 1
-                            if_end = code.index('< ] ' + if_op_id + ' >', if_begin)
-                            condition2 = True
-                            var1_is_defined = True; var2_is_defined = True
+#/\---------------------------------------------------------------------------------------------------/\# 'op text' function
+
+     if function == 4: #'if:' + 'while:'
+
+        if (len(code[i + 1].split()) == 4) and (code[i + 1].split()[1] == '['):
+            if_op_id = code[i + 1].split()[2]
                     
-                #--- first var
+            if ('< ] ' + if_op_id + ' >') in code:
+                if_begin = code.index('< [ ' + if_op_id + ' >') + 1
+                if_end = code.index('< ] ' + if_op_id + ' >', if_begin)
+                condition2 = True
+                var1_is_defined = True; var2_is_defined = True
+
+                for j in range(len(code[i].split())):
+                    if code[i].split()[j] in condit_op:
+                        op_sym = j
                     
-                            condition = True
-                            if len(code[i].split()) == 6:
+    #--- first var
+                    
+                condition = True
+                if len(code[i].split()[:op_sym]) == 3:
                         
-                                if code[i].split()[2] in var_names:
-                                    value = var_names.index(code[i].split()[2])
-                                    var1 = var_values[value]
+                    if code[i].split()[2] in var_names:
+                        value = var_names.index(code[i].split()[2])
+                        var1 = var_values[value]
 
-                                else:
-                                    for j in range(len(code[i].split()[2])):
+                    else:
+                        for j in range(len(code[i].split()[2])):
 
-                                        if code[i].split()[2][j] not in math_supported_symbols:
-                                            condition = False
+                            if code[i].split()[2][j] not in math_supported_symbols:
+                                condition = False
 
-                                    if condition == True:
-                                        var1 = float(code[i].split()[2])
+                        if condition == True:
+                            var1 = float(code[i].split()[2])
 
-                                    else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var1_is_defined = False
+                        else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var1_is_defined = False
 
-                            elif (len(code[i].split()[:code[i].split().index('>') + 1]) >= 8) and (code[i].split()[2] == '('):
-                                stringvar = ''
-                                value = code[i].split().index(')', 1)
+                elif (len(code[i].split()[:op_sym]) >= 5) and (code[i].split()[2] == '('):
+                    stringvar = ''
+                    value = code[i].split().index(')', 1)
 
-                                for j in range(3, value):
-                                    stringvar += str(code[i].split()[j])
+                    for j in range(3, value):
+                        stringvar += str(code[i].split()[j])
 
-                                stringvar = stringvar.replace('`_', ' ')
-                                var1 = stringvar
+                    stringvar = stringvar.replace('`_', ' ')
+                    var1 = stringvar
 
-                #--- second var
+    #--- second var
                         
-                            condition = True
-                            if len(code[i].split()) == 6:
+                condition = True
+                if len(code[i].split()[op_sym:]) == 3:
                         
-                                if code[i].split()[4] in var_names:
-                                    value = var_names.index(code[i].split()[4])
-                                    var2 = var_values[value]
+                    if code[i].split()[4] in var_names:
+                        value = var_names.index(code[i].split()[4])
+                        var2 = var_values[value]
 
-                                else:
-                                    for j in range(len(code[i].split()[4])):
+                    else:
+                        for j in range(len(code[i].split()[4])):
 
-                                        if code[i].split()[4][j] not in math_supported_symbols:
-                                            condition = False
+                            if code[i].split()[4][j] not in math_supported_symbols:
+                                condition = False
 
-                                    if condition == True:
-                                        var2 = float(code[i].split()[4])
+                        if condition == True:
+                            var2 = float(code[i].split()[4])
 
-                                    else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var2_is_defined = False
+                        else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var2_is_defined = False
 
-                            elif (len(code[i].split()[:code[i].split().index('>') + 1]) >= 8) and (code[i].split()[3:].count('(') == 1):
-                                stringvar = ''
+                elif (len(code[i].split()[op_sym:]) >= 5) and (code[i].split()[op_sym:].count('(') == 1):
+                    stringvar = ''
 
-                                for j in range(code[i].split().index('(', 4) + 1, len(code[i].split()) - 2):
-                                    stringvar += str(code[i].split()[j])
+                    for j in range(code[i].split().index('(', op_sym) + 1, len(code[i].split()) - 2):
+                        stringvar += str(code[i].split()[j])
 
-                                stringvar = stringvar.replace('`_', ' ')
-                                var2 = stringvar
+                    stringvar = stringvar.replace('`_', ' ')
+                    var2 = stringvar
            
-                #--- logical operations
+    #--- logical operations
 
-                            if (var1_is_defined == True) and (var2_is_defined == True):
+                if (var1_is_defined == True) and (var2_is_defined == True):
 
-                                if type(var1) != type(var2): print("\n/< Console output - event.ERROR: Logical operation between num and text vars [Line: " + str(i + 1) + "] >/\n")
+                    if type(var1) != type(var2): print("\n/< Console output - event.ERROR: Logical operation between num and text vars [Line: " + str(i + 1) + "] >/\n")
 
-                                else:
+                    else:
                         
-                                    if (code[i].split()[3] in math_condit_sym) and (type(var1) == type(var2) == float):
+                        if (code[i].split()[3] in math_condit_sym) and (type(var1) == type(var2) == float):
 
-                                        if (code[i].split()[3] == '|>') or (code[i].split()[3] == '!<='):
-                                            if var1 > var2:
-                                                condition2 = True
-                                            else: condition2 = False
+                            if (code[i].split()[3] == '|>') or (code[i].split()[3] == '!<='):
+                                if var1 > var2:
+                                    condition2 = True
+                                else: condition2 = False
 
-                                        if (code[i].split()[3] == '|<') or (code[i].split()[3] == '!>='):
-                                            if var1 < var2:
-                                                condition2 = True
-                                            else: condition2 = False
+                            if (code[i].split()[3] == '|<') or (code[i].split()[3] == '!>='):
+                                if var1 < var2:
+                                    condition2 = True
+                                else: condition2 = False
 
-                                        if code[i].split()[3] == '|=':
-                                            if var1 == var2:
-                                                condition2 = True
-                                            else: condition2 = False
+                            if code[i].split()[3] == '|=':
+                                if var1 == var2:
+                                    condition2 = True
+                                else: condition2 = False
     
-                                        if code[i].split()[3] == '!=':
-                                            if var1 != var2:
-                                                condition2 = True
-                                            else: condition2 = False
+                            if code[i].split()[3] == '!=':
+                                if var1 != var2:
+                                    condition2 = True
+                                else: condition2 = False
     
-                                        if (code[i].split()[3] == '|>=') or ((code[i].split()[3] == '!<')):
-                                            if var1 >= var2:
-                                                condition2 = True
-                                            else: condition2 = False
+                            if (code[i].split()[3] == '|>=') or ((code[i].split()[3] == '!<')):
+                                if var1 >= var2:
+                                    condition2 = True
+                                else: condition2 = False
 
-                                        if (code[i].split()[3] == '|<=') or (code[i].split()[3] == '!>'):
-                                            if var1 <= var2:
-                                                condition2 = True
-                                            else: condition2 = False
+                            if (code[i].split()[3] == '|<=') or (code[i].split()[3] == '!>'):
+                                if var1 <= var2:
+                                    condition2 = True
+                                else: condition2 = False
 
-                                    elif type(var1) == type(var2) == str:
+                        elif type(var1) == type(var2) == str:
 
-                                        if code[i].split()[3] == 'in':
-                                            if var1 in var2:
-                                                condition2 = True
-                                            else: condition2 = False
+                            if code[i].split()[3] == 'in':
+                                if var1 in var2:
+                                    condition2 = True
+                                else: condition2 = False
 
-                                    if condition2 == False:
+                            if code[i].split()[3] == 'not_in':
+                                if var1 not in var2:
+                                    condition2 = True
+                                else: condition2 = False
 
-                                        for j in range(if_begin, if_end):
-                                            code[j] = code[j][1:]
+                        if condition2 == False:
+
+                             for j in range(if_begin, if_end):
+                                  code[j] = code[j][1:]
+ 
+                        elif (code[i].split()[1] == 'while:') and (condition2 == True):
+
+                             reserve = code
+                             code = ['{'] + code[if_begin:if_end] + ['}']
+                             while condition2 == True:
+                                  for i in range(1, len(code) - 1):
+
+                                       if ('<' in code[i].split()) and ('>' in code[i].split()):
+                                            if (code[i].split()[0] == '<') or (code[i].split()[-1] == '>'):
+
+                                                 if code[i].split()[1] == 'var:': line_check(1)
+
+                                                 if code[i].split()[1] == 'write:': line_check(2)
+
+                                                 if code[i].split()[1] == 'op:': line_check(3)
+
+                                                 if (code[i].split()[1] == 'if:') or (code[i].split()[1] == 'while:'): line_check(4) # Do not work now
                                             
-                        else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n"); break
-                    else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n"); break
+            else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n")
+        else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n")
                     
 #/\---------------------------------------------------------------------------------------------------/\# 'if' function
+    for i in range(1, len(code) - 1):
+        
+          if ('<' in code[i].split()) and ('>' in code[i].split()):
+               if (code[i].split()[0] == '<') or (code[i].split()[-1] == '>'):
+
+                    if code[i].split()[1] == 'var:': line_check(1)
+
+                    if code[i].split()[1] == 'write:': line_check(2)
+
+                    if code[i].split()[1] == 'op:': line_check(3)
+
+                    if (code[i].split()[1] == 'if:') or (code[i].split()[1] == 'while:'): line_check(4)
+#/\---------------------------------------------------------------------------------------------------/\# Line checking
+              
     line_counter = 0
     if '}' in code: print('-' * 34 + '\n/< Console output: Console mode >/\n')
     consoleline = input('>> ')
@@ -398,6 +438,12 @@ while consoleline != '/exit':
 
     if len(consoleline.split()) > 1:
 
+        if consoleline.split()[0] == '/run':
+
+             code = open(consoleline.split()[1]).readlines(); code[0] = '{'
+             for y in range(len(code)):
+                 if ('< ' in code[y]) and ( ' >' in code[y]): code[y] = code[y][code[y].index('< '):]; code[y] = code[y][:code[y].index(' >') + 2]
+                 
         if consoleline.split()[0] == '/write':
             stringvar = ''
 
