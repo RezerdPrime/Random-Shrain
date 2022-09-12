@@ -1,7 +1,10 @@
+import sys
+sys.setrecursionlimit(10000)
+
 print('Welcome to ArrowString S!\n\n{\n< write: ( Hello`_World! ) >\n}\n\nUse *help* for more information\n')
 code = reserve = []; memory = []
 var_names = []; var_values = []; var_types = []
-consoleline = ''; line_counter = 0
+consoleline = ''; line_counter = op_sym = var1 = var2 = important_shit = 0
 math_supported_symbols = '0123456789.'
 math_condit_sym = ['|>', '|<', '|=', '|>=', '|<=', '!>', '!<', '!=', '!>=', '!<=']; condit_op = math_condit_sym + ['in', 'not_in']
 
@@ -32,6 +35,7 @@ while consoleline != '/exit':
         print('\nhelp | *console_help* | operations_help\n\nFunctions:\n')
         print("'/save' - save-to-memory function. Remember that the memory is reset each time you re-enter.\n")
         print("'/clear' - clearing function.\n") # How unexpected lmao
+        
         print("'/exit' - out from the program.\n")
         print("'/write *var* / ( *text* )' - console output function. It deletes all Spaces. To printing ' ' use '`_' as in example.\n")
         print("'/call var_data / memory' - calls some compiled information.\n")
@@ -59,8 +63,25 @@ while consoleline != '/exit':
         print("'|<=' - less or equals      '!<=' - not less and not equals ('|>')\n")
 
 #/\---------------------------------------------------------------------------------------------------/\# Core of the programming language
+    def line_check_begin(begin, end):
+        global code, i, var1, var2, op_sym
+        
+        for i in range(begin, end):
+        
+              if ('<' in code[i].split()) and ('>' in code[i].split()):
+                   if (code[i].split()[0] == '<') or (code[i].split()[-1] == '>'):
+
+                        if code[i].split()[1] == 'var:': line_check(1)
+
+                        if code[i].split()[1] == 'write:': line_check(2)
+
+                        if code[i].split()[1] == 'op:': line_check(3)
+
+                        if (code[i].split()[1] == 'if:') or (code[i].split()[1] == 'while:'): line_check(4)
+                        
+#/\---------------------------------------------------------------------------------------------------/\# Line checking
     def line_check(function):
-     global code, i, var1, var2
+     global code, i, var1, var2, op_sym
      
      if function == 1: #'var:'
 
@@ -141,7 +162,7 @@ while consoleline != '/exit':
 #/\---------------------------------------------------------------------------------------------------/\# 'var' function
 
      if function == 2: #'write:'
-            
+         
         if code[i].split()[2] == '(':
             stringvar = ''
             for j in range(3, len(code[i].split()) - 2):
@@ -149,6 +170,7 @@ while consoleline != '/exit':
             stringvar = stringvar.replace('`_', ' ')
             stringvar = '\n/< Console output: "' + stringvar + '" >/\n'
             print(stringvar)
+
 
         if code[i].split()[2] != '(':
 
@@ -263,43 +285,49 @@ while consoleline != '/exit':
 
         if (len(code[i + 1].split()) == 4) and (code[i + 1].split()[1] == '['):
             if_op_id = code[i + 1].split()[2]
-                    
-            if ('< ] ' + if_op_id + ' >') in code:
+            condition_line_index = i # as constant
+            condit_line = code[condition_line_index].split()
+            
+        else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n")
+
+        def condition_check(function):
+            global code, i, var1, var2, op_sym, important_shit
+
+            for j in range(len(condit_line)):
+                if condit_line[j] in condit_op:
+                    op_sym = j
+            
+            if (('< ] ' + if_op_id + ' >') in code) and (function == 4):
                 if_begin = code.index('< [ ' + if_op_id + ' >') + 1
                 if_end = code.index('< ] ' + if_op_id + ' >', if_begin)
                 condition2 = True
                 var1_is_defined = True; var2_is_defined = True
-
-                for j in range(len(code[i].split())):
-                    if code[i].split()[j] in condit_op:
-                        op_sym = j
-                    
+                                            
     #--- first var
-                    
                 condition = True
-                if len(code[i].split()[:op_sym]) == 3:
+                if len(condit_line[:op_sym]) == 3:
                         
-                    if code[i].split()[2] in var_names:
-                        value = var_names.index(code[i].split()[2])
+                    if condit_line[2] in var_names:
+                        value = var_names.index(condit_line[2])
                         var1 = var_values[value]
 
                     else:
-                        for j in range(len(code[i].split()[2])):
+                        for j in range(len(condit_line[2])):
 
-                            if code[i].split()[2][j] not in math_supported_symbols:
+                            if condit_line[2][j] not in math_supported_symbols:
                                 condition = False
 
                         if condition == True:
-                            var1 = float(code[i].split()[2])
+                            var1 = float(condit_line[2])
 
-                        else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var1_is_defined = False
+                        else: print('\n/< Console output - event.ERROR: Variable1 is not defined [Line: ' + str(i + 1) + '] >/\n'); var1_is_defined = False
 
-                elif (len(code[i].split()[:op_sym]) >= 5) and (code[i].split()[2] == '('):
+                elif (len(condit_line[:op_sym]) >= 5) and (condit_line[2] == '('):
                     stringvar = ''
-                    value = code[i].split().index(')', 1)
+                    value = condit_line.index(')', 1)
 
                     for j in range(3, value):
-                        stringvar += str(code[i].split()[j])
+                        stringvar += str(condit_line[j])
 
                     stringvar = stringvar.replace('`_', ' ')
                     var1 = stringvar
@@ -307,28 +335,28 @@ while consoleline != '/exit':
     #--- second var
                         
                 condition = True
-                if len(code[i].split()[op_sym:]) == 3:
+                if len(condit_line[op_sym:]) == 3:
                         
-                    if code[i].split()[4] in var_names:
-                        value = var_names.index(code[i].split()[4])
+                    if condit_line[4] in var_names:
+                        value = var_names.index(condit_line[4])
                         var2 = var_values[value]
 
                     else:
-                        for j in range(len(code[i].split()[4])):
+                        for j in range(len(condit_line[4])):
 
-                            if code[i].split()[4][j] not in math_supported_symbols:
+                            if condit_line[4][j] not in math_supported_symbols:
                                 condition = False
 
                         if condition == True:
-                            var2 = float(code[i].split()[4])
+                            var2 = float(condit_line[4])
 
-                        else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n'); var2_is_defined = False
+                        else: print('\n/< Console output - event.ERROR: Variable2 is not defined [Line: ' + str(i + 1) + '] >/\n'); var2_is_defined = False
 
-                elif (len(code[i].split()[op_sym:]) >= 5) and (code[i].split()[op_sym:].count('(') == 1):
+                elif (len(condit_line[op_sym:]) >= 5) and (condit_line[op_sym:].count('(') == 1):
                     stringvar = ''
 
-                    for j in range(code[i].split().index('(', op_sym) + 1, len(code[i].split()) - 2):
-                        stringvar += str(code[i].split()[j])
+                    for j in range(condit_line.index('(', op_sym) + 1, len(condit_line) - 2):
+                        stringvar += str(condit_line[j])
 
                     stringvar = stringvar.replace('`_', ' ')
                     var2 = stringvar
@@ -341,91 +369,67 @@ while consoleline != '/exit':
 
                     else:
                         
-                        if (code[i].split()[3] in math_condit_sym) and (type(var1) == type(var2) == float):
+                        if (condit_line[3] in math_condit_sym) and (type(var1) == type(var2) == float):
 
-                            if (code[i].split()[3] == '|>') or (code[i].split()[3] == '!<='):
+                            if (condit_line[op_sym] == '|>') or (condit_line[op_sym] == '!<='):
                                 if var1 > var2:
                                     condition2 = True
                                 else: condition2 = False
 
-                            if (code[i].split()[3] == '|<') or (code[i].split()[3] == '!>='):
+                            if (condit_line[op_sym] == '|<') or (condit_line[op_sym] == '!>='):
                                 if var1 < var2:
                                     condition2 = True
                                 else: condition2 = False
 
-                            if code[i].split()[3] == '|=':
+                            if condit_line[op_sym] == '|=':
                                 if var1 == var2:
                                     condition2 = True
                                 else: condition2 = False
     
-                            if code[i].split()[3] == '!=':
+                            if condit_line[op_sym] == '!=':
                                 if var1 != var2:
                                     condition2 = True
                                 else: condition2 = False
     
-                            if (code[i].split()[3] == '|>=') or ((code[i].split()[3] == '!<')):
+                            if (condit_line[op_sym] == '|>=') or ((condit_line[op_sym] == '!<')):
                                 if var1 >= var2:
                                     condition2 = True
                                 else: condition2 = False
 
-                            if (code[i].split()[3] == '|<=') or (code[i].split()[3] == '!>'):
+                            if (condit_line[op_sym] == '|<=') or (condit_line[op_sym] == '!>'):
                                 if var1 <= var2:
                                     condition2 = True
                                 else: condition2 = False
 
                         elif type(var1) == type(var2) == str:
 
-                            if code[i].split()[3] == 'in':
+                            if condit_line[op_sym] == 'in':
                                 if var1 in var2:
                                     condition2 = True
                                 else: condition2 = False
 
-                            if code[i].split()[3] == 'not_in':
+                            if condit_line[op_sym] == 'not_in':
                                 if var1 not in var2:
                                     condition2 = True
                                 else: condition2 = False
 
                         if condition2 == False:
 
+                             important_shit = 1
                              for j in range(if_begin, if_end):
                                   code[j] = code[j][1:]
  
-                        elif (code[i].split()[1] == 'while:') and (condition2 == True):
+                        elif condit_line[1] == 'while:':
 
-                             reserve = code
-                             code = ['{'] + code[if_begin:if_end] + ['}']
-                             while condition2 == True:
-                                  for i in range(1, len(code) - 1):
-
-                                       if ('<' in code[i].split()) and ('>' in code[i].split()):
-                                            if (code[i].split()[0] == '<') or (code[i].split()[-1] == '>'):
-
-                                                 if code[i].split()[1] == 'var:': line_check(1)
-
-                                                 if code[i].split()[1] == 'write:': line_check(2)
-
-                                                 if code[i].split()[1] == 'op:': line_check(3)
-
-                                                 if (code[i].split()[1] == 'if:') or (code[i].split()[1] == 'while:'): line_check(4) # Do not work now
-                                            
+                             while important_shit == 0:
+                                  line_check_begin(if_begin, if_end)
+                                  condition_check(4)
+                                          
             else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n")
-        else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n")
-                    
+
+        condition_check(4)                
 #/\---------------------------------------------------------------------------------------------------/\# 'if' function
-    for i in range(1, len(code) - 1):
-        
-          if ('<' in code[i].split()) and ('>' in code[i].split()):
-               if (code[i].split()[0] == '<') or (code[i].split()[-1] == '>'):
-
-                    if code[i].split()[1] == 'var:': line_check(1)
-
-                    if code[i].split()[1] == 'write:': line_check(2)
-
-                    if code[i].split()[1] == 'op:': line_check(3)
-
-                    if (code[i].split()[1] == 'if:') or (code[i].split()[1] == 'while:'): line_check(4)
-#/\---------------------------------------------------------------------------------------------------/\# Line checking
-              
+    line_check_begin(1, len(code) - 1)
     line_counter = 0
     if '}' in code: print('-' * 34 + '\n/< Console output: Console mode >/\n')
     consoleline = input('>> ')
