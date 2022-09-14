@@ -28,7 +28,8 @@ while consoleline != '/exit':
         print("'var:' - assignment function.\n< var: *name* = *value* >\n< var: *name* = /input_num or /input_text > (input from the keyboard)\n")
         print("'write:' - output function. It deletes all Spaces. To printing ' ' use '`_' as in example.\n< write: *var* >\n< write: ( *random text* ) >\n")
         print("'op:' - function for beginning operations (only one operation per line). Has 2 types of arguments.\n< op: math: *var* *math operation* *other var / number* >\n< op: text: *var* *text operations* *other var / text* >\n")
-        print("'if:' - logical function (also only one per line)\n< if: *var* / ( *text* ) *logical operation* *other var* / ( *text* ) >\n< [ *identifier* >\n< *some code* >\n< ] *identifier* >\n")
+        print("'if:' - logical function (also only one per line).\n< if: *var* / ( *text* ) *logical operation* *other var* / ( *text* ) >\n< [ *identifier* >\n< *some code* >\n< ] *identifier* >\n")
+        print("'while' - cycle function. This is similar to the 'if' function. Cycle works while condition is true.\n")
         code[1] = ''
 
     if 'console_help' in code:
@@ -39,6 +40,7 @@ while consoleline != '/exit':
         print("'/exit' - out from the program.\n")
         print("'/write *var* / ( *text* )' - console output function. It deletes all Spaces. To printing ' ' use '`_' as in example.\n")
         print("'/call var_data / memory' - calls some compiled information.\n")
+        print("'/run *file_path*' - activates a file with previously written code.\n")
 
     if 'operations_help' in code:
         print('\nhelp | console_help | *operations_help*\n\nOperations:\n')
@@ -444,9 +446,16 @@ while consoleline != '/exit':
 
         if consoleline.split()[0] == '/run':
 
-             code = open(consoleline.split()[1]).readlines(); code[0] = '{'
-             for y in range(len(code)):
-                 if ('< ' in code[y]) and ( ' >' in code[y]): code[y] = code[y][code[y].index('< '):]; code[y] = code[y][:code[y].index(' >') + 2]
+             import os.path
+             if os.path.exists(consoleline.split()[1]) == True:
+                 
+                 print('\n')
+                 code = open(consoleline.split()[1]).readlines(); code[0] = '{'
+                 for y in range(len(code)):
+                     print(code[y].replace('\n', ''))
+                     if ('< ' in code[y]) and ( ' >' in code[y]): code[y] = code[y][code[y].index('< '):]; code[y] = code[y][:code[y].index(' >') + 2];
+
+             else: print('\n/< Console output - event.ERROR: Path does not exist >/\n')
                  
         if consoleline.split()[0] == '/write':
             stringvar = ''
