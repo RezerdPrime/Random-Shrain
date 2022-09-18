@@ -6,7 +6,7 @@ code = []; memory = []
 var_names = []; var_values = []; var_types = []
 consoleline = ''; line_counter = op_sym = var1 = var2 = important_shit = 0
 math_supported_symbols = '0123456789.'
-math_condit_sym = ['|>', '|<', '|=', '|>=', '|<=', '!>', '!<', '!=', '!>=', '!<=']; condit_op = math_condit_sym + ['in', 'not_in']
+math_condit_sym = ['|>', '|<', '|=', '|>=', '|<=', '!>', '!<', '!=', '!>=', '!<=']; condit_op = math_condit_sym + ['in', 'not_in', 'is', 'not_is']
 
 while consoleline != '/exit':
     if '}' not in code: print('-' * 31 + '\n/< Console output: Code mode >/\n')
@@ -63,6 +63,8 @@ while consoleline != '/exit':
         print("'|=' - equals               '!=' - not equals ('|>' or '|<')\n")
         print("'|>=' - more or equals      '!>=' - not more and not equals ('|<')\n")
         print("'|<=' - less or equals      '!<=' - not less and not equals ('|>')\n")
+        print("'|is' - '|=' for text vars   '!is' - '!=' for text vars\n")
+        print("'|in' - existing in text     '!in' - not existing in text\n")
 
 #/\---------------------------------------------------------------------------------------------------/\# Core of the programming language
     def line_check_begin(begin, end):
@@ -75,7 +77,7 @@ while consoleline != '/exit':
 
                         if code[i].split()[1] == 'var:': line_check(1)
 
-                        if code[i].split()[1] == 'write:': line_check(2)
+                        if (code[i].split()[1] == 'write:') or (code[i].split()[1] == 'print:'): line_check(2)
 
                         if code[i].split()[1] == 'op:': line_check(3)
 
@@ -162,7 +164,6 @@ while consoleline != '/exit':
             stringvar = stringvar.replace('`_', ' ')
             var_values[value] = stringvar
 #/\---------------------------------------------------------------------------------------------------/\# 'var' function
-
      if function == 2: #'write:'
          
         if code[i].split()[2] == '(':
@@ -172,7 +173,6 @@ while consoleline != '/exit':
             stringvar = stringvar.replace('`_', ' ')
             stringvar = '\n/< Console output: "' + stringvar + '" >/\n'
             print(stringvar)
-
 
         if code[i].split()[2] != '(':
 
@@ -184,7 +184,6 @@ while consoleline != '/exit':
                 stringvar = '\n/< Console output: "' + str(var_values[value]) + '" >/\n'
                 print(stringvar)
 #/\---------------------------------------------------------------------------------------------------/\# 'write' function
-
      if function == 3: #'op:'
 
         if code[i].split()[3] in var_names:
@@ -282,7 +281,6 @@ while consoleline != '/exit':
         else: print('\n/< Console output - event.ERROR: Variable is not defined [Line: ' + str(i + 1) + '] >/\n')
                     
 #/\---------------------------------------------------------------------------------------------------/\# 'op text' function
-
      if function == 4: #'if:' + 'while:'
 
         if (len(code[i + 1].split()) == 4) and (code[i + 1].split()[1] == '['):
@@ -303,9 +301,8 @@ while consoleline != '/exit':
                 if_begin = code.index('< [ ' + if_op_id + ' >') + 1
                 if_end = code.index('< ] ' + if_op_id + ' >', if_begin)
                 condition2 = True
-                var1_is_defined = True; var2_is_defined = True
-                                            
-    #--- first var
+                var1_is_defined = True; var2_is_defined = True                       
+    #--------------------------------------------------------------------- first var
                 condition = True
                 if len(condit_line[:op_sym]) == 3:
                         
@@ -333,9 +330,7 @@ while consoleline != '/exit':
 
                     stringvar = stringvar.replace('`_', ' ')
                     var1 = stringvar
-
-    #--- second var
-                        
+    #--------------------------------------------------------------------- second var      
                 condition = True
                 if len(condit_line[op_sym:]) == 3:
                         
@@ -362,15 +357,12 @@ while consoleline != '/exit':
 
                     stringvar = stringvar.replace('`_', ' ')
                     var2 = stringvar
-           
-    #--- logical operations
-
+    #--------------------------------------------------------------------- logical operations
                 if (var1_is_defined == True) and (var2_is_defined == True):
 
                     if type(var1) != type(var2): print("\n/< Console output - event.ERROR: Logical operation between num and text vars [Line: " + str(i + 1) + "] >/\n")
 
                     else:
-                        
                         if (condit_line[3] in math_condit_sym) and (type(var1) == type(var2) == float):
 
                             if (condit_line[op_sym] == '|>') or (condit_line[op_sym] == '!<='):
@@ -405,13 +397,23 @@ while consoleline != '/exit':
 
                         elif type(var1) == type(var2) == str:
 
-                            if condit_line[op_sym] == 'in':
+                            if condit_line[op_sym] == '|in':
                                 if var1 in var2:
                                     condition2 = True
                                 else: condition2 = False
 
-                            if condit_line[op_sym] == 'not_in':
+                            if condit_line[op_sym] == '!in':
                                 if var1 not in var2:
+                                    condition2 = True
+                                else: condition2 = False
+
+                            if condit_line[op_sym] == '|is':
+                                if var1 == var2:
+                                    condition2 = True
+                                else: condition2 = False
+                                
+                            if condit_line[op_sym] == '!is':
+                                if var1 != var2:
                                     condition2 = True
                                 else: condition2 = False
 
@@ -428,7 +430,6 @@ while consoleline != '/exit':
                                   condition_check(4)
 
             else: print("\n/< Console output - event.ERROR: Invalid syntax [Line: " + str(i + 2) + "] >/\n")
-
         condition_check(4)                
 #/\---------------------------------------------------------------------------------------------------/\# 'if' function
     line_check_begin(1, len(code) - 1)
@@ -457,7 +458,7 @@ while consoleline != '/exit':
 
              else: print('\n/< Console output - event.ERROR: Path does not exist >/\n')
                  
-        if consoleline.split()[0] == '/write':
+        if (consoleline.split()[0] == '/write') or (consoleline.split()[0] == '/print'):
             stringvar = ''
 
             if consoleline.split()[1] != '(':
