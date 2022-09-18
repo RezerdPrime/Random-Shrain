@@ -6,7 +6,7 @@ code = []; memory = []
 var_names = []; var_values = []; var_types = []
 consoleline = ''; line_counter = op_sym = var1 = var2 = important_shit = 0
 math_supported_symbols = '0123456789.'
-math_condit_sym = ['|>', '|<', '|=', '|>=', '|<=', '!>', '!<', '!=', '!>=', '!<=']; condit_op = math_condit_sym + ['in', 'not_in', 'is', 'not_is']
+math_condit_sym = ['|>', '|<', '|=', '|>=', '|<=', '!>', '!<', '!=', '!>=', '!<=']; condit_op = math_condit_sym + ['|in', '!in', '|is', '!is']
 
 while consoleline != '/exit':
     if '}' not in code: print('-' * 31 + '\n/< Console output: Code mode >/\n')
