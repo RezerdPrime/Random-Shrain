@@ -1,1 +1,1 @@
-I actually don't why it was made lmao
+I actually don't know why it was made lmao
