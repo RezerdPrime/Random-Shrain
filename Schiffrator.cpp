@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <string>
@@ -23,12 +23,8 @@ int main()
         while (!fin.eof()) {
             inversible_bit = rand() % 8; key += to_string(inversible_bit);
 
-            //sym = fin.get() | (1 << inversible_bit);
-
             sym = fin.get(); //cout << (int)sym << " ";
             sym ^= 1 << inversible_bit; //cout << (int)sym << endl;
-
-            //sym = ((~fin.get() & 127) + rand()) % 128;
 
             text[index] = sym;
             index++;
@@ -61,7 +57,6 @@ int main()
         for (int i = 0; i < number; i++) {
             inversible_bit = (int)key[i] - 48;
 
-            //sym = fin.get() & ~(1 << inversible_bit);
             sym = fin.get(); //cout << (int)sym << " ";
             sym ^= 1 << inversible_bit; //cout << (int)sym << endl;
 
@@ -75,8 +70,3 @@ int main()
         }
     }
 }
-
-/*
-
-
-*/
