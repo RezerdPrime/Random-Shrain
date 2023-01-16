@@ -46,7 +46,7 @@ type_var type(void) { return t_VOID; }
 #define UN unsigned
 #define LD long double
 
-typedef int boolean;
+typedef int bul;
 #define false 0
 #define true 1
 #define FALSE 0
@@ -57,6 +57,10 @@ typedef int boolean;
 
  //=======================================================================//
 //			printf
+
+#define __ ;cout(" ")
+#define n_ ;cout("\n")
+#define t_ ;cout("\t")
 
 void cout(const char t[]) { for (int i = 0; t[i] != '\0'; i++) { printf("%c", t[i]); } }
 
@@ -151,7 +155,26 @@ void fin_(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *(&bu
 
 
  //=======================================================================//
-//			MAX nd MIN
+//			Dynamic arrays
+
+#include <windows.h>
+
+#define arr_init0(arr, size, type)  type* arr = (type*)calloc(size, sizeof(type));
+#define arr2D_init0(arr, size1, size2, type)  type** arr = (type**)calloc(size1, sizeof(type*)); for (int i = 0; i < size1; i++) { arr[i] = (type*)calloc(size2, sizeof(type)); }
+
+#define arr_init(arr, size, type)	type* arr = new type[size]
+#define arr2D_init(arr, size1, size2, type)		type** arr = new type*[size1]; for (int i = 0; i < size1; i++) { arr[i] = new type[size2]; }
+
+void cout(char arr[], int size) { for (int i = 0; i < size; i++) { cout(arr[i])__; } }
+void cout_ctoi(char arr[], int size) { for (int i = 0; i < size; i++) { cout((int)arr[i])__; } }
+
+void cout(char* arr[], int size1, int size2) { for (int i = 0; i < size1; i++) { cout(arr[i], size2)n_; } }
+void cout_ctoi(char* arr[], int size1, int size2) { for (int i = 0; i < size1; i++) { cout_ctoi(arr[i], size2)n_; } }
 
 
+ //=======================================================================//
+//		ChangeLog
 
+/*
+15.01.2023 - First release
+16.01.2023 - Dynamic arrays macros and functions added
