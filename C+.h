@@ -221,11 +221,11 @@ void fin_(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *(&bu
 
 #include <windows.h>
 
-#define arr_init0(arr, size, type)				type* arr = (type*)calloc(size, sizeof(type));
+#define arr_init0(arr, size, type)		type* arr = (type*)calloc(size, sizeof(type));
 #define arr2D_init0(arr, size1, size2, type)	type** arr = (type**)calloc(size1, sizeof(type*)); for (int i = 0; i < size1; i++) { arr[i] = (type*)calloc(size2, sizeof(type)); }
 
-#define arr_init(arr, size, type)				type* arr = new type[size];
-#define arr2D_init(arr, size1, size2, type)		type** arr = new type*[size1]; for (int i = 0; i < size1; i++) { arr[i] = new type[size2]; }
+#define arr_init(arr, size, type)		type* arr = new type[size];
+#define arr2D_init(arr, size1, size2, type)	type** arr = new type*[size1]; for (int i = 0; i < size1; i++) { arr[i] = new type[size2]; }
 
 #define mout(arr, size) for (int i = 0; i < size; i++) { cout(arr[i]) __ }
 #define mout2D(arr, size1, size2) for (int i = 0; i < size1; i++) { mout(arr[i], size2) n_ }
