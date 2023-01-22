@@ -45,6 +45,12 @@ type_var type(void) { return t_VOID; }
 #define LL long long
 #define UN unsigned
 #define LD long double
+#define D106 1000000
+#define D109 1000000000
+#define D231 2147483647
+#define D263 9223372036854775807
+#define Fpi 3.1415926535897932384626433832795
+#define Fe 2,7182818284590452353602874713527
 
 typedef int bul;
 #define false 0
@@ -58,11 +64,15 @@ typedef int bul;
  //=======================================================================//
 //			printf
 
-#define __ ;cout(" ")
-#define n_ ;cout("\n")
-#define t_ ;cout("\t")
+#define ___ ;cout(" ");
+#define _n_ ;cout("\n");
+#define _t_ ;cout("\t");
 
-void cout(const char t[]) { for (int i = 0; t[i] != '\0'; i++) { printf("%c", t[i]); } }
+#define __ ___;
+#define n_ _n_;
+#define t_ _t_;
+
+void cout(const char t[]) { printf("%s", t); } 
 
 void cout(char var) { printf("%c", var); }
 void cout(UN char var) { printf("%c", var); }
@@ -79,6 +89,24 @@ void cout(ULL var) { printf("%llu", var); }
 void cout(float var) { printf("%f", var); }
 void cout(double var) { printf("%g", var); }
 void cout(LD var) { printf("%lg", var); }
+
+#define cout1(a) cout(a);
+#define cout2(a, b) cout1(a) cout(b);
+#define cout3(a, b, c) cout2(a, b) cout(c);
+#define cout4(a, b, c, d) cout3(a, b, c) cout(d);
+#define cout5(a, b, c, d, e) cout4(a, b, c, d) cout(e);
+#define cout6(a, b, c, d, e, f) cout5(a, b, c, d, e) cout(f);
+#define cout7(a, b, c, d, e, f, g) cout6(a, b, c, d, e, f) cout(g);
+#define cout8(a, b, c, d, e, f, g, h) cout7(a, b, c, d, e, f, g) cout(h);
+#define cout9(a, b, c, d, e, f, g, h, i) cout8(a, b, c, d, e, f, g, h) cout(i);
+#define cout0(a, b, c, d, e, f, g, h, i, j) cout9(a, b, c, d, e, f, g, h, i) cout(j);
+
+/*
+
+And yes, u should to set number of agruments. 
+It's underscores why the library is named "C+.h".
+
+*/
 
 
  //=======================================================================//
@@ -104,6 +132,17 @@ void cin_(double* var) { double buf; scanf("%g", &buf); *var = *(&buf); }
 
 void cin_(LD* var) { LD buf; scanf("%lg", &buf); *var = *(&buf); }
 
+#define cin1(a) cin(a);
+#define cin2(a, b) cin1(a) cin(b);
+#define cin3(a, b, c) cin2(a, b) cin(c);
+#define cin4(a, b, c, d) cin3(a, b, c) cin(d);
+#define cin5(a, b, c, d, e) cin4(a, b, c, d) cin(e);
+#define cin6(a, b, c, d, e, f) cin5(a, b, c, d, e) cin(f);
+#define cin7(a, b, c, d, e, f, g) cin6(a, b, c, d, e, f) cin(g);
+#define cin8(a, b, c, d, e, f, g, h) cin7(a, b, c, d, e, f, g) cin(h);
+#define cin9(a, b, c, d, e, f, g, h, i) cin8(a, b, c, d, e, f, g, h) cin(i);
+#define cin0(a, b, c, d, e, f, g, h, i, j) cin9(a, b, c, d, e, f, g, h, i) cin(j);
+
 
  //=======================================================================//
 //			file shit
@@ -111,7 +150,8 @@ void cin_(LD* var) { LD buf; scanf("%lg", &buf); *var = *(&buf); }
 #define ofstream(file, path) FILE* file = fopen(path, "w")
 #define ifstream(file, path) FILE* file = fopen(path, "r")
 
-void fout(FILE* file, const char text[]) { for (int i = 0; text[i] != '\0'; i++) { fprintf(file, "%c", text[i]); } }
+//void fout(FILE* file, const char text[]) { for (int i = 0; text[i] != '\0'; i++) { fprintf(file, "%c", text[i]); } }
+void fout(FILE* file, const char text[]) { fprintf(file, "%s", text); }
 
 void fout(FILE* file, char var) { fprintf(file, "%c", var); }
 void fout(FILE* file, UN char var) { fprintf(file, "%c", var); }
@@ -130,6 +170,17 @@ void fout(FILE* file, float var) { fprintf(file, "%f", var); }
 void fout(FILE* file, double var) { fprintf(file, "%g", var); }
 
 void fout(FILE* file, LD var) { fprintf(file, "%lg", var); }
+
+#define fout1(file, a) fout(file, a);
+#define fout2(file, a, b) fout1(file, a) fout(file, b);
+#define fout3(file, a, b, c) fout2(file, a, b) fout(file, c);
+#define fout4(file, a, b, c, d) fout3(file, a, b, c) fout(file, d);
+#define fout5(file, a, b, c, d, e) fout4(file, a, b, c, d) fout(file, e);
+#define fout6(file, a, b, c, d, e, f) fout5(file, a, b, c, d, e) fout(file, f);
+#define fout7(file, a, b, c, d, e, f, g) fout6(file, a, b, c, d, e, f) fout(file, g);
+#define fout8(file, a, b, c, d, e, f, g, h) fout7(file, a, b, c, d, e, f, g) fout(file, h);
+#define fout9(file, a, b, c, d, e, f, g, h, i) fout8(file, a, b, c, d, e, f, g, h) fout(file, i);
+#define fout0(file, a, b, c, d, e, f, g, h, i, j) fout9(file, a, b, c, d, e, f, g, h, i) fout(file, j);
 
 //
 
@@ -153,23 +204,31 @@ void fin_(FILE* file, double* var) { double buf; fscanf(file, "%g", &buf); *var 
 
 void fin_(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *(&buf); }
 
+#define fin1(file, a) fin(file, a);
+#define fin2(file, a, b) fin1(file, a) fin(file, b);
+#define fin3(file, a, b, c) fin2(file, a, b) fin(file, c);
+#define fin4(file, a, b, c, d) fin3(file, a, b, c) fin(file, d);
+#define fin5(file, a, b, c, d, e) fin4(file, a, b, c, d) fin(file, e);
+#define fin6(file, a, b, c, d, e, f) fin5(file, a, b, c, d, e) fin(file, f);
+#define fin7(file, a, b, c, d, e, f, g) fin6(file, a, b, c, d, e, f) fin(file, g);
+#define fin8(file, a, b, c, d, e, f, g, h) fin7(file, a, b, c, d, e, f, g) fin(file, h);
+#define fin9(file, a, b, c, d, e, f, g, h, i) fin8(file, a, b, c, d, e, f, g, h) fin(file, i);
+#define fin0(file, a, b, c, d, e, f, g, h, i, j) fin9(file, a, b, c, d, e, f, g, h, i) fin(file, j);
+
 
  //=======================================================================//
 //			Dynamic arrays
 
 #include <windows.h>
 
-#define arr_init0(arr, size, type)  type* arr = (type*)calloc(size, sizeof(type));
-#define arr2D_init0(arr, size1, size2, type)  type** arr = (type**)calloc(size1, sizeof(type*)); for (int i = 0; i < size1; i++) { arr[i] = (type*)calloc(size2, sizeof(type)); }
+#define arr_init0(arr, size, type)				type* arr = (type*)calloc(size, sizeof(type));
+#define arr2D_init0(arr, size1, size2, type)	type** arr = (type**)calloc(size1, sizeof(type*)); for (int i = 0; i < size1; i++) { arr[i] = (type*)calloc(size2, sizeof(type)); }
 
-#define arr_init(arr, size, type)	type* arr = new type[size]
+#define arr_init(arr, size, type)				type* arr = new type[size];
 #define arr2D_init(arr, size1, size2, type)		type** arr = new type*[size1]; for (int i = 0; i < size1; i++) { arr[i] = new type[size2]; }
 
-void cout(char arr[], int size) { for (int i = 0; i < size; i++) { cout(arr[i])__; } }
-void cout_ctoi(char arr[], int size) { for (int i = 0; i < size; i++) { cout((int)arr[i])__; } }
-
-void cout(char* arr[], int size1, int size2) { for (int i = 0; i < size1; i++) { cout(arr[i], size2)n_; } }
-void cout_ctoi(char* arr[], int size1, int size2) { for (int i = 0; i < size1; i++) { cout_ctoi(arr[i], size2)n_; } }
+#define mout(arr, size) for (int i = 0; i < size; i++) { cout(arr[i]) __ }
+#define mout2D(arr, size1, size2) for (int i = 0; i < size1; i++) { mout(arr[i], size2) n_ }
 
 
  //=======================================================================//
@@ -178,4 +237,8 @@ void cout_ctoi(char* arr[], int size1, int size2) { for (int i = 0; i < size1; i
 /*
 15.01.2023 - First release
 16.01.2023 - Dynamic arrays macros and functions added
+22.01.2023 - Added macros for one millon, billion, max of int, max of LL, Pi, Euler constant,
+	     Added extended macros for "cout" and "cin", "fout" and "fin". 
+	     Added macros for array's outputing
+-
 */
