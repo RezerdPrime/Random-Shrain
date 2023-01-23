@@ -291,17 +291,6 @@ void fin_dbl(FILE* file, DB* var) { DB buf; fscanf(file, "%g", &buf); *var = *(&
 
 void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *(&buf); }
 
-#define fin_1(file, a) fin_(file, a);
-#define fin_2(file, a, b) fin_1(file, a) fin_(file, b);
-#define fin_3(file, a, b, c) fin_2(file, a, b) fin_(file, c);
-#define fin_4(file, a, b, c, d) fin_3(file, a, b, c) fin_(file, d);
-#define fin_5(file, a, b, c, d, e) fin_4(file, a, b, c, d) fin_(file, e);
-#define fin_6(file, a, b, c, d, e, f) fin_5(file, a, b, c, d, e) fin_(file, f);
-#define fin_7(file, a, b, c, d, e, f, g) fin_6(file, a, b, c, d, e, f) fin_(file, g);
-#define fin_8(file, a, b, c, d, e, f, g, h) fin_7(file, a, b, c, d, e, f, g) fin_(file, h);
-#define fin_9(file, a, b, c, d, e, f, g, h, i) fin_8(file, a, b, c, d, e, f, g, h) fin_(file, i);
-#define fin_10(file, a, b, c, d, e, f, g, h, i, j) fin_9(file, a, b, c, d, e, f, g, h, i) fin_(file, j);
-
 #define fin__(file, x)          \
         _Generic((file, x),     \
         CH*: fin_ch,            \
@@ -317,6 +306,17 @@ void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *
         LD*: fin_ldbl,          \
         default: fin_in         \
 )(file, x)
+
+#define fin_1(file, a) fin_(file, a);
+#define fin_2(file, a, b) fin_1(file, a) fin_(file, b);
+#define fin_3(file, a, b, c) fin_2(file, a, b) fin_(file, c);
+#define fin_4(file, a, b, c, d) fin_3(file, a, b, c) fin_(file, d);
+#define fin_5(file, a, b, c, d, e) fin_4(file, a, b, c, d) fin_(file, e);
+#define fin_6(file, a, b, c, d, e, f) fin_5(file, a, b, c, d, e) fin_(file, f);
+#define fin_7(file, a, b, c, d, e, f, g) fin_6(file, a, b, c, d, e, f) fin_(file, g);
+#define fin_8(file, a, b, c, d, e, f, g, h) fin_7(file, a, b, c, d, e, f, g) fin_(file, h);
+#define fin_9(file, a, b, c, d, e, f, g, h, i) fin_8(file, a, b, c, d, e, f, g, h) fin_(file, i);
+#define fin_10(file, a, b, c, d, e, f, g, h, i, j) fin_9(file, a, b, c, d, e, f, g, h, i) fin_(file, j);
 
 // тут должна быть реализация перегрузки по кол-ву аргументов
 
