@@ -131,15 +131,15 @@ void cout_ldbl(LD var) { printf("%lg", var); }
 )(x)
 
 #define cout_1(a) cout_(a);
-#define cout_2(a,b) cout_1(a);cout_(b);
-#define cout_3(a,b,c) cout_2(a,b);cout_(c);
-#define cout_4(a,b,c,d) cout_3(a,b,c);cout_(d);
-#define cout_5(a,b,c,d,e) cout_4(a,b,c,d);cout_(e);
-#define cout_6(a,b,c,d,e,f) cout_5(a,b,c,d,e);cout_(f);
-#define cout_7(a,b,c,d,e,f,g) cout_6(a,b,c,d,e,f);cout_(g);
-#define cout_8(a,b,c,d,e,f,g,h) cout_7(a,b,c,d,e,f,g);cout_(h);
-#define cout_9(a,b,c,d,e,f,g,h,i) cout_8(a,b,c,d,e,f,g,h);cout_(i);
-#define cout_10(a,b,c,d,e,f,g,h,i,j) cout_9(a,b,c,d,e,f,g,h,i);cout_(j);
+#define cout_2(a, b) cout_1(a); cout_(b);
+#define cout_3(a, b, c) cout_2(a, b); cout_(c);
+#define cout_4(a, b, c, d) cout_3(a, b, c); cout_(d);
+#define cout_5(a, b, c, d, e) cout_4(a, b, c, d); cout_(e);
+#define cout_6(a, b, c, d, e, f) cout_5(a, b, c, d, e); cout_(f);
+#define cout_7(a, b, c, d, e, f, g) cout_6(a, b, c, d, e, f); cout_(g);
+#define cout_8(a, b, c, d, e, f, g, h) cout_7(a, b, c, d, e, f, g); cout_(h);
+#define cout_9(a, b, c, d, e, f, g, h, i) cout_8(a, b, c, d, e, f, g, h); cout_(i);
+#define cout_10(a, b, c, d, e, f, g, h, i, j) cout_9(a, b, c, d, e, f, g, h, i); cout_(j);
 
 #define CAT1(x,y) CAT1_(x,y)
 #define CAT1_(x,y) x##y
