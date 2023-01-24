@@ -4,7 +4,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
-//=======================================================================//
+ //=======================================================================//
 //			Comfortable stuff
 
 #define elif else if
@@ -22,6 +22,7 @@
 #define FL float
 #define DB double
 #define LD long double
+#define BL bool
 
 #define D106 1000000
 #define D109 1000000000
@@ -30,16 +31,14 @@
 #define Fpi 3.1415926535897932384626433832795
 #define Fe 2.7182818284590452353602874713527
 
-typedef int bool;
-#define false 0
-#define true 1
-#define FALSE 0
-#define TRUE 1
-#define False 0
-#define True 1
+typedef enum bool_ BL;
+enum bool_ {
+    False,
+    True,
+}; // ну типа умный да
 
 
-//=======================================================================//
+ //=======================================================================//
 //			type function
 
 enum types
@@ -92,7 +91,7 @@ type_var type_void(void) { return t_VOID; }
         default: type_void      \
 )(x)
 
-//=======================================================================//
+ //=======================================================================//
 //			printf
 
 void cout_st(CH* t) { printf("%s", t); }
@@ -131,15 +130,15 @@ void cout_ldbl(LD var) { printf("%lg", var); }
 )(x)
 
 #define cout_1(a) cout_(a);
-#define cout_2(a, b) cout_1(a); cout_(b);
-#define cout_3(a, b, c) cout_2(a, b); cout_(c);
-#define cout_4(a, b, c, d) cout_3(a, b, c); cout_(d);
-#define cout_5(a, b, c, d, e) cout_4(a, b, c, d); cout_(e);
-#define cout_6(a, b, c, d, e, f) cout_5(a, b, c, d, e); cout_(f);
-#define cout_7(a, b, c, d, e, f, g) cout_6(a, b, c, d, e, f); cout_(g);
-#define cout_8(a, b, c, d, e, f, g, h) cout_7(a, b, c, d, e, f, g); cout_(h);
-#define cout_9(a, b, c, d, e, f, g, h, i) cout_8(a, b, c, d, e, f, g, h); cout_(i);
-#define cout_10(a, b, c, d, e, f, g, h, i, j) cout_9(a, b, c, d, e, f, g, h, i); cout_(j);
+#define cout_2(a,b) cout_1(a);cout_(b);
+#define cout_3(a,b,c) cout_2(a,b);cout_(c);
+#define cout_4(a,b,c,d) cout_3(a,b,c);cout_(d);
+#define cout_5(a,b,c,d,e) cout_4(a,b,c,d);cout_(e);
+#define cout_6(a,b,c,d,e,f) cout_5(a,b,c,d,e);cout_(f);
+#define cout_7(a,b,c,d,e,f,g) cout_6(a,b,c,d,e,f);cout_(g);
+#define cout_8(a,b,c,d,e,f,g,h) cout_7(a,b,c,d,e,f,g);cout_(h);
+#define cout_9(a,b,c,d,e,f,g,h,i) cout_8(a,b,c,d,e,f,g,h);cout_(i);
+#define cout_10(a,b,c,d,e,f,g,h,i,j) cout_9(a,b,c,d,e,f,g,h,i);cout_(j);
 
 #define CAT1(x,y) CAT1_(x,y)
 #define CAT1_(x,y) x##y
@@ -152,7 +151,7 @@ void cout_ldbl(LD var) { printf("%lg", var); }
 #define t_ ,"\t",
 
 
-//=======================================================================//
+ //=======================================================================//
 //			scanf
 
 void cin_ch(CH* var) { CH buf = getchar(); *var = *(&buf); }
@@ -208,7 +207,7 @@ void cin_ldbl(LD* var) { LD buf; scanf("%lg", &buf); *var = *(&buf); }
 #define cin(...) CAT2(cin_,VA_COUNT(__VA_ARGS__))(__VA_ARGS__)
 
 
-//=======================================================================//
+ //=======================================================================//
 //			file shit
 
 #define ofstream(file, path) FILE* file = fopen(path, "w")
@@ -291,6 +290,17 @@ void fin_dbl(FILE* file, DB* var) { DB buf; fscanf(file, "%g", &buf); *var = *(&
 
 void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *(&buf); }
 
+#define fin_1(file, a) fin_(file, a);
+#define fin_2(file, a, b) fin_1(file, a) fin_(file, b);
+#define fin_3(file, a, b, c) fin_2(file, a, b) fin_(file, c);
+#define fin_4(file, a, b, c, d) fin_3(file, a, b, c) fin_(file, d);
+#define fin_5(file, a, b, c, d, e) fin_4(file, a, b, c, d) fin_(file, e);
+#define fin_6(file, a, b, c, d, e, f) fin_5(file, a, b, c, d, e) fin_(file, f);
+#define fin_7(file, a, b, c, d, e, f, g) fin_6(file, a, b, c, d, e, f) fin_(file, g);
+#define fin_8(file, a, b, c, d, e, f, g, h) fin_7(file, a, b, c, d, e, f, g) fin_(file, h);
+#define fin_9(file, a, b, c, d, e, f, g, h, i) fin_8(file, a, b, c, d, e, f, g, h) fin_(file, i);
+#define fin_10(file, a, b, c, d, e, f, g, h, i, j) fin_9(file, a, b, c, d, e, f, g, h, i) fin_(file, j);
+
 #define fin__(file, x)          \
         _Generic((file, x),     \
         CH*: fin_ch,            \
@@ -307,18 +317,14 @@ void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *
         default: fin_in         \
 )(file, x)
 
-#define fin_1(file, a) fin_(file, a);
-#define fin_2(file, a, b) fin_1(file, a) fin_(file, b);
-#define fin_3(file, a, b, c) fin_2(file, a, b) fin_(file, c);
-#define fin_4(file, a, b, c, d) fin_3(file, a, b, c) fin_(file, d);
-#define fin_5(file, a, b, c, d, e) fin_4(file, a, b, c, d) fin_(file, e);
-#define fin_6(file, a, b, c, d, e, f) fin_5(file, a, b, c, d, e) fin_(file, f);
-#define fin_7(file, a, b, c, d, e, f, g) fin_6(file, a, b, c, d, e, f) fin_(file, g);
-#define fin_8(file, a, b, c, d, e, f, g, h) fin_7(file, a, b, c, d, e, f, g) fin_(file, h);
-#define fin_9(file, a, b, c, d, e, f, g, h, i) fin_8(file, a, b, c, d, e, f, g, h) fin_(file, i);
-#define fin_10(file, a, b, c, d, e, f, g, h, i, j) fin_9(file, a, b, c, d, e, f, g, h, i) fin_(file, j);
-
 // тут должна быть реализация перегрузки по кол-ву аргументов
+
+
+ //=======================================================================//
+//			a
+
+
+
 
 #endif //C_PLUS
 
@@ -329,4 +335,5 @@ void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *
 15.01.2023 - Первый релиз
 23.01.2023 - Осознание того, что я долбаёб и пишу сишную библиотеку в файле с расширением .cpp
              Реализация перегрузки для функций type(), cout(), cin()
+24.01.2023 - Переделанный булевый тип данных, потому что да
 */
