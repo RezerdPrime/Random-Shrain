@@ -130,21 +130,21 @@ void cout_ldbl(LD var) { printf("%lg", var); }
 )(x)
 
 #define cout_1(a) cout_(a);
-#define cout_2(a,b) cout_1(a);cout_(b);
-#define cout_3(a,b,c) cout_2(a,b);cout_(c);
-#define cout_4(a,b,c,d) cout_3(a,b,c);cout_(d);
-#define cout_5(a,b,c,d,e) cout_4(a,b,c,d);cout_(e);
-#define cout_6(a,b,c,d,e,f) cout_5(a,b,c,d,e);cout_(f);
-#define cout_7(a,b,c,d,e,f,g) cout_6(a,b,c,d,e,f);cout_(g);
-#define cout_8(a,b,c,d,e,f,g,h) cout_7(a,b,c,d,e,f,g);cout_(h);
-#define cout_9(a,b,c,d,e,f,g,h,i) cout_8(a,b,c,d,e,f,g,h);cout_(i);
-#define cout_10(a,b,c,d,e,f,g,h,i,j) cout_9(a,b,c,d,e,f,g,h,i);cout_(j);
+#define cout_2(a, b) cout_1(a) cout_(b);
+#define cout_3(a, b, c) cout_2(a, b) cout_(c);
+#define cout_4(a, b, c, d) cout_3(a, b, c) cout_(d);
+#define cout_5(a, b, c, d, e) cout_4(a, b, c, d) cout_(e);
+#define cout_6(a, b, c, d, e, f) cout_5(a, b, c, d, e) cout_(f);
+#define cout_7(a, b, c, d, e, f, g) cout_6(a, b, c, d, e, f) cout_(g);
+#define cout_8(a, b, c, d, e, f, g, h) cout_7(a, b, c, d, e, f, g) cout_(h);
+#define cout_9(a, b, c, d, e, f, g, h, i) cout_8(a, b, c, d, e, f, g, h) cout_(i);
+#define cout_10(a, b, c, d, e, f, g, h, i, j) cout_9(a, b, c, d, e, f, g, h, i) cout_(j);
 
-#define CAT1(x,y) CAT1_(x,y)
-#define CAT1_(x,y) x##y
-#define VA_COUNT(...) VA_COUNT_(__VA_ARGS__,10,9,8,7,6,5,4,3,2,1,0)
-#define VA_COUNT_(x10,x9,x8,x7,x6,x5,x4,x3,x2,x1,x0,...) x0
-#define cout(...) CAT1(cout_,VA_COUNT(__VA_ARGS__))(__VA_ARGS__)
+#define CAT1cout(x,y) CAT1_cout(x,y)
+#define CAT1_cout(x,y) x##y
+#define VA_COUNTcout(...) VA_COUNT_cout(__VA_ARGS__,10,9,8,7,6,5,4,3,2,1,0)
+#define VA_COUNT_cout(x10,x9,x8,x7,x6,x5,x4,x3,x2,x1,x0,...) x0
+#define cout(...) CAT1cout(cout_,VA_COUNTcout(__VA_ARGS__))(__VA_ARGS__)
 
 #define __ ," ",
 #define n_ ,"\n",
@@ -200,11 +200,11 @@ void cin_ldbl(LD* var) { LD buf; scanf("%lg", &buf); *var = *(&buf); }
 #define cin_9(a, b, c, d, e, f, g, h, i) cin_8(a, b, c, d, e, f, g, h) cin_(i);
 #define cin_10(a, b, c, d, e, f, g, h, i, j) cin_9(a, b, c, d, e, f, g, h, i) cin_(j);
 
-#define CAT2(x,y) CAT2_(x,y)
-#define CAT2_(x,y) x##y
-#define VA_COUNT(...) VA_COUNT_(__VA_ARGS__,10,9,8,7,6,5,4,3,2,1,0)
-#define VA_COUNT_(x10,x9,x8,x7,x6,x5,x4,x3,x2,x1,x0,...) x0
-#define cin(...) CAT2(cin_,VA_COUNT(__VA_ARGS__))(__VA_ARGS__)
+#define CAT2cin(x,y) CAT2_cin(x,y)
+#define CAT2_cin(x,y) x##y
+#define VA_COUNTcin(...) VA_COUNT_cin(__VA_ARGS__,10,9,8,7,6,5,4,3,2,1,0)
+#define VA_COUNT_cin(x10,x9,x8,x7,x6,x5,x4,x3,x2,x1,x0,...) x0
+#define cin(...) CAT2cin(cin_,VA_COUNTcin(__VA_ARGS__))(__VA_ARGS__)
 
 
  //=======================================================================//
@@ -250,24 +250,22 @@ void fout_ldbl(FILE* file, LD var) { fprintf(file, "%lg", var); }
         default: fout_in        \
 )(file, x)
 
-#define fout_1(file, a) fout_(file, a);
-#define fout_2(file, a, b) fout_1(file, a); fout_(file, b);
-#define fout_3(file, a, b, c) fout_2(file, a, b); fout_(file, c);
-#define fout_4(file, a, b, c, d) fout_3(file, a, b, c); fout_(file, d);
-#define fout_5(file, a, b, c, d, e) fout_4(file, a, b, c, d); fout_(file, e);
-#define fout_6(file, a, b, c, d, e, f) fout_5(file, a, b, c, d, e); fout_(file, f);
-#define fout_7(file, a, b, c, d, e, f, g) fout_6(file, a, b, c, d, e, f); fout_(file, g);
-#define fout_8(file, a, b, c, d, e, f, g, h) fout_7(file, a, b, c, d, e, f, g); fout_(file, h);
-#define fout_9(file, a, b, c, d, e, f, g, h, i) fout_8(file, a, b, c, d, e, f, g, h); fout_(file, i);
-#define fout_10(file, a, b, c, d, e, f, g, h, i, j) fout_9(file, a, b, c, d, e, f, g, h, i) fout_(file, j);
+#define fout_2(file, a) fout_(file, a);
+#define fout_3(file, a, b) fout_2(file, a); fout_(file, b);
+#define fout_4(file, a, b, c) fout_3(file, a, b); fout_(file, c);
+#define fout_5(file, a, b, c, d) fout_4(file, a, b, c); fout_(file, d);
+#define fout_6(file, a, b, c, d, e) fout_5(file, a, b, c, d); fout_(file, e);
+#define fout_7(file, a, b, c, d, e, f) fout_6(file, a, b, c, d, e); fout_(file, f);
+#define fout_8(file, a, b, c, d, e, f, g) fout_7(file, a, b, c, d, e, f); fout_(file, g);
+#define fout_9(file, a, b, c, d, e, f, g, h) fout_8(file, a, b, c, d, e, f, g); fout_(file, h);
+#define fout_10(file, a, b, c, d, e, f, g, h, i) fout_9(file, a, b, c, d, e, f, g, h); fout_(file, i);
+#define fout_11(file, a, b, c, d, e, f, g, h, i, j) fout_10(file, a, b, c, d, e, f, g, h, i) fout_(file, j);
 
-//#define FCAT1(x,y) FCAT1_(x,y)
-//#define FCAT1_(x,y) x##y
-//#define VA_COUNT(...) VA_COUNT_(__VA_ARGS__,10,9,8,7,6,5,4,3,2,1,0)
-//#define VA_COUNT_(x10,x9,x8,x7,x6,x5,x4,x3,x2,x1,x0,...) x0
-//#define fout(...) FCAT1(fout_,VA_COUNT(__VA_ARGS__))(__VA_ARGS__)
-
-// как передавать обязательный аргумент блять
+#define FCAT1fout(x,y) FCAT1_fout(x,y)
+#define FCAT1_fout(x,y) x##y
+#define VA_COUNTfout(...) VA_COUNT_fout(__VA_ARGS__,10,9,8,7,6,5,4,3,2,1,0)
+#define VA_COUNT_fout(x10,x9,x8,x7,x6,x5,x4,x3,x2,x1,x0,...) x0
+#define fout(...) FCAT1fout(fout_,VA_COUNTfout(__VA_ARGS__))(__VA_ARGS__)
 
 
 #define fin_(file, x) fin__(file, &x) // fin() типа для общей функции с перегрузкой по количеству аргументов
@@ -290,17 +288,6 @@ void fin_dbl(FILE* file, DB* var) { DB buf; fscanf(file, "%g", &buf); *var = *(&
 
 void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *(&buf); }
 
-#define fin_1(file, a) fin_(file, a);
-#define fin_2(file, a, b) fin_1(file, a) fin_(file, b);
-#define fin_3(file, a, b, c) fin_2(file, a, b) fin_(file, c);
-#define fin_4(file, a, b, c, d) fin_3(file, a, b, c) fin_(file, d);
-#define fin_5(file, a, b, c, d, e) fin_4(file, a, b, c, d) fin_(file, e);
-#define fin_6(file, a, b, c, d, e, f) fin_5(file, a, b, c, d, e) fin_(file, f);
-#define fin_7(file, a, b, c, d, e, f, g) fin_6(file, a, b, c, d, e, f) fin_(file, g);
-#define fin_8(file, a, b, c, d, e, f, g, h) fin_7(file, a, b, c, d, e, f, g) fin_(file, h);
-#define fin_9(file, a, b, c, d, e, f, g, h, i) fin_8(file, a, b, c, d, e, f, g, h) fin_(file, i);
-#define fin_10(file, a, b, c, d, e, f, g, h, i, j) fin_9(file, a, b, c, d, e, f, g, h, i) fin_(file, j);
-
 #define fin__(file, x)          \
         _Generic((file, x),     \
         CH*: fin_ch,            \
@@ -317,7 +304,22 @@ void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *
         default: fin_in         \
 )(file, x)
 
-// тут должна быть реализация перегрузки по кол-ву аргументов
+#define fin_2(file, a) fin_(file, a);
+#define fin_3(file, a, b) fin_2(file, a) fin_(file, b);
+#define fin_4(file, a, b, c) fin_3(file, a, b) fin_(file, c);
+#define fin_5(file, a, b, c, d) fin_4(file, a, b, c) fin_(file, d);
+#define fin_6(file, a, b, c, d, e) fin_5(file, a, b, c, d) fin_(file, e);
+#define fin_7(file, a, b, c, d, e, f) fin_6(file, a, b, c, d, e) fin_(file, f);
+#define fin_8(file, a, b, c, d, e, f, g) fin_7(file, a, b, c, d, e, f) fin_(file, g);
+#define fin_9(file, a, b, c, d, e, f, g, h) fin_8(file, a, b, c, d, e, f, g) fin_(file, h);
+#define fin_10(file, a, b, c, d, e, f, g, h, i) fin_9(file, a, b, c, d, e, f, g, h) fin_(file, i);
+#define fin_11(file, a, b, c, d, e, f, g, h, i, j) fin_10(file, a, b, c, d, e, f, g, h, i) fin_(file, j);
+
+#define FCAT2fin(x,y) FCAT2_fin(x,y)
+#define FCAT2_fin(x,y) x##y
+#define VA_COUNTfin(...) VA_COUNT_fin(__VA_ARGS__,10,9,8,7,6,5,4,3,2,1,0)
+#define VA_COUNT_fin(x10,x9,x8,x7,x6,x5,x4,x3,x2,x1,x0,...) x0
+#define fin(...) FCAT2fin(fin_,VA_COUNTfin(__VA_ARGS__))(__VA_ARGS__)
 
 
  //=======================================================================//
@@ -328,6 +330,7 @@ void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *
 
 #endif //C_PLUS
 
+
 //=======================================================================//
 //			ChangeLog
 
@@ -336,4 +339,5 @@ void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *
 23.01.2023 - Осознание того, что я долбаёб и пишу сишную библиотеку в файле с расширением .cpp
              Реализация перегрузки для функций type(), cout(), cin()
 24.01.2023 - Переделанный булевый тип данных, потому что да
+25.01.2023 - Реализация перегрузки для функций записи fout() и чтения fin() данных из файла
 */
