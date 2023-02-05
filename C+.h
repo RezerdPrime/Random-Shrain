@@ -4,8 +4,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
- //=======================================================================//
-//			Comfortable stuff
+ ///=======================================================================//
+///			Comfortable stuff
 
 #define elif else if
 #define and &&
@@ -38,8 +38,8 @@ enum bool_ {
 }; // ну типа умный да
 
 
- //=======================================================================//
-//			type function
+ ///=======================================================================///
+///			type function
 
 enum types
 {
@@ -91,8 +91,8 @@ type_var type_void(void) { return t_VOID; }
         default: type_void      \
 )(x)
 
- //=======================================================================//
-//			printf
+ ///=======================================================================///
+///			printf
 
 void cout_st(CH* t) { printf("%s", t); }
 
@@ -149,10 +149,16 @@ void cout_ldbl(LD var) { printf("%lg", var); }
 #define __ ," ",
 #define n_ ,"\n",
 #define t_ ,"\t",
+#define SP " "
+#define NL "\n"
+#define TB "\t"
+#define SPACE cout(" ")
+#define ENDL cout("\n")
+#define TAB cout("\t")
 
 
- //=======================================================================//
-//			scanf
+ ///=======================================================================///
+///			scanf
 
 void cin_ch(CH* var) { CH buf = getchar(); *var = *(&buf); }
 void cin_uch(UCH* var) { UCH buf = getchar(); *var = *(&buf); }
@@ -207,8 +213,8 @@ void cin_ldbl(LD* var) { LD buf; scanf("%lg", &buf); *var = *(&buf); }
 #define cin(...) CAT2cin(cin_,VA_COUNTcin(__VA_ARGS__))(__VA_ARGS__)
 
 
- //=======================================================================//
-//			file shit
+ ///=======================================================================///
+///			file shit
 
 #define ofstream(file, path) FILE* file = fopen(path, "w")
 #define ifstream(file, path) FILE* file = fopen(path, "r")
@@ -268,7 +274,7 @@ void fout_ldbl(FILE* file, LD var) { fprintf(file, "%lg", var); }
 #define fout(...) FCAT1fout(fout_,VA_COUNTfout(__VA_ARGS__))(__VA_ARGS__)
 
 
-#define fin_(file, x) fin__(file, &x) // fin() типа для общей функции с перегрузкой по количеству аргументов
+#define fin_(file, x) fin__(file, &x)
 
 void fin_ch(FILE* file, CH* var) { CH buf = getc(file); *var = *(&buf); }
 void fin_uch(FILE* file, UCH* var) { UCH buf = getc(file); *var = *(&buf); }
@@ -322,22 +328,78 @@ void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *
 #define fin(...) FCAT2fin(fin_,VA_COUNTfin(__VA_ARGS__))(__VA_ARGS__)
 
 
- //=======================================================================//
-//			a
+ ///=======================================================================///
+///			Self-written random
+
+int RDVALUE_ = 1;
+#define RAND RD()
+
+void set_seed(DB seed) { RDVALUE_ = *(int*)(&seed); } // Yes, it really just assigns a value lmao
+
+int RD(void) {
+    int A;
+    RDVALUE_ = (RDVALUE_ + (int)(&A)) * 1103515245 + 12345;
+    return RDVALUE_ % D231;
+}
 
 
+ ///=======================================================================///
+///			Lil math stuff
 
+IN f_i_if(FL var) { return *(IN*)(&var); } // real to integer
+LL f_i_ld(DB var) { return *(LL*)(&var); }
+LL f_i_lld(LD var) { return *(LL*)(&var); }
+
+#define f_i(x)          \
+        _Generic((x),   \
+        FL: f_i_if,     \
+        DB: f_i_ld,     \
+        LD: f_i_lld     \
+)(x)
+
+CH mod_ch(CH var) { return var * ((var >> 7) | 1); }
+SH mod_sh(SH var) { return var * ((var >> 15) | 1); }
+IN mod_in(IN var) { return var * ((var >> 31) | 1); }
+LL mod_ll(LL var) { return var * ((var >> 63) | 1); }
+
+FL mod_fl(FL var) { return var * (1 - 2 * (var < 0)); }
+DB mod_dbl(DB var) { return var * (1 - 2 * (var < 0)); }
+LD mod_ld(LD var) { return var * (1 - 2 * (var < 0)); }
+
+#define mod(x)          \
+        _Generic((x),   \
+        CH: mod_ch,     \
+        SH: mod_sh,     \
+        IN: mod_in,     \
+        LL: mod_ll,     \
+        FL: mod_fl,     \
+        DB: mod_dbl,    \
+        LD: mod_ld      \
+)(x)
+
+
+ ///=======================================================================///
+///			a
 
 #endif //C_PLUS
 
 
-//=======================================================================//
-//			ChangeLog
+ ///=======================================================================///
+///			ChangeLog
 
-/*
+/**
 15.01.2023 - Первый релиз
+
 23.01.2023 - Осознание того, что я долбаёб и пишу сишную библиотеку в файле с расширением .cpp
              Реализация перегрузки для функций type(), cout(), cin()
+
 24.01.2023 - Переделанный булевый тип данных, потому что да
+
 25.01.2023 - Реализация перегрузки для функций записи fout() и чтения fin() данных из файла
-*/
+
+05.02.2023 - Реализация самописного рандомайзера с заданием сида 
+             Добавление функции копирования битов вещественного числа в целочисленное
+             Добавление самописного модуля числа (взятие абсолютного значения)
+             Добавление макросов для более комфортного использования эскейп-последовательностей и пробела
+             Обновление оформления
+**/
