@@ -334,12 +334,12 @@ void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *
 int RDVALUE_ = 1;
 #define RAND RD()
 
-void set_seed(DB seed) { RDVALUE_ = *(int*)(&seed); } // Yes, it really just assigns a value lmao
+void set_seed(DB seed) { RDVALUE_ -= *(int*)(&seed); } // Yes, it really just assigns a value lmao
 
 int RD(void) {
     int A;
     RDVALUE_ = (RDVALUE_ + (int)(&A)) * 1103515245 + 12345;
-    return RDVALUE_ % D231;
+    return RDVALUE_ / 31;
 }
 
 
