@@ -10,6 +10,7 @@
 #define elif else if
 #define and &&
 #define or ||
+#define range(index, begin, end, step) (int index = begin; index < end; index += step)
 
 #define CH char
 #define UCH unsigned char
@@ -33,8 +34,8 @@
 
 typedef enum bool_ BL;
 enum bool_ {
-    False,
-    True,
+    False = 0, false = 0, FALSE = 0,
+    True = 1, true = 1, TRUE = 1,
 }; // ну типа умный да
 
 
@@ -329,21 +330,6 @@ void fin_ldbl(FILE* file, LD* var) { LD buf; fscanf(file, "%lg", &buf); *var = *
 
 
  ///=======================================================================///
-///			Self-written random
-
-int RDVALUE_ = 1;
-#define RAND RD()
-
-void set_seed(DB seed) { RDVALUE_ -= *(int*)(&seed); } // Yes, it really just assigns a value lmao
-
-int RD(void) {
-    int A;
-    RDVALUE_ = (RDVALUE_ + (int)(&A)) * 1103515245 + 12345;
-    return RDVALUE_ / 31;
-}
-
-
- ///=======================================================================///
 ///			Lil math stuff
 
 IN f_i_if(FL var) { return *(IN*)(&var); } // real to integer
@@ -379,7 +365,82 @@ LD mod_ld(LD var) { return var * (1 - 2 * (var < 0)); }
 
 
  ///=======================================================================///
+///			Self-written random
+
+int RDVALUE_ = 1;
+#define RAND RD()
+
+void set_seed(DB seed) { RDVALUE_ -= *(int*)(&seed); } // Yes, it really just assigns a value lmao
+
+int RD(void) {
+    int A;
+    RDVALUE_ = (RDVALUE_ + (int)(&A)) * 1103515245 + 12345;
+    return RDVALUE_ / 31;
+}
+
+int RDrange(int begin, int end) { return begin + mod(RAND) % end; }
+
+
+ ///=======================================================================///
+///			Type String (ну а чеб нет)
+
+#include <malloc.h>
+#include <string.h>
+#define find strstr
+typedef char* string;
+
+int len(string str) {
+    for (int i = 0; true; i++) { if (!str[i]) { return i; } }
+}
+
+string conc(string a, string b) {
+    int len_a = len(a),
+        len_b = len(b);
+    string c = malloc(len_a + len_b + 1);
+    memcpy(c, a, len_a);
+    memcpy(c + len_a, b, len_b + 1);
+    return c;
+}
+
+string replace(string Orig_Str, string Old_Piece, string New_Piece) {
+    // спизженно со стэковерфлоу :clown: :clown:
+    string result;
+    char *ins,
+          tmp;
+    int len_rep,
+        len_with,
+        len_front,
+        count;
+
+    if (!Orig_Str || !Old_Piece) return NULL;
+
+    len_rep = len(Old_Piece);
+    if (len_rep == 0) return NULL;
+
+    if (!New_Piece) New_Piece = "";
+    len_with = len(New_Piece);
+
+    ins = Orig_Str;
+    for (count = 0; tmp = find(ins, Old_Piece); ++count) { ins = tmp + len_rep; }
+
+    tmp = result = malloc(strlen(Orig_Str) + (len_with - len_rep) * count + 1);
+    if (!result) return NULL;
+
+    while (count--) {
+        ins = strstr(Orig_Str, Old_Piece);
+        len_front = ins - Orig_Str;
+        tmp = strncpy(tmp, Orig_Str, len_front) + len_front;
+        tmp = strcpy(tmp, New_Piece) + len_with;
+        Orig_Str += len_front + len_rep;
+    }
+    strcpy(tmp, Orig_Str);
+    return result;
+}
+
+
+ ///=======================================================================///
 ///			a
+
 
 #endif //C_PLUS
 
@@ -397,9 +458,17 @@ LD mod_ld(LD var) { return var * (1 - 2 * (var < 0)); }
 
 25.01.2023 - Реализация перегрузки для функций записи fout() и чтения fin() данных из файла
 
-05.02.2023 - Реализация самописного рандомайзера с заданием сида 
+05.02.2023 - Реализация самописного рандомайзера с заданием сида
              Добавление функции копирования битов вещественного числа в целочисленное
              Добавление самописного модуля числа (взятие абсолютного значения)
              Добавление макросов для более комфортного использования эскейп-последовательностей и пробела
              Обновление оформления
+
+06.02.2023 - Создание макроса для более удобного цикла for
+             Добавление функции для псевдорандомного числа в определённом диапазоне
+             Блять
+
+08.02.2023 - Добавление типа String
+             Добавление функции conc() (strcat не фурычит по причинам реализации)
+             Добавление функции len() и replace()
 **/
