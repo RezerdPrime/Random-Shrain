@@ -29,7 +29,7 @@ int main()
         while (!fin.eof()) {
             sym = fin.get(); //cout << (int)sym << " ";
             if (!fin.eof() or sym != -1) {
-                mov = RD();
+                mov = RD() % 256;
                 sym += mov;
                 fout << sym;
 
