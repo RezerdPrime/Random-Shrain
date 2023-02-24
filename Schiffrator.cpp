@@ -2,7 +2,7 @@
 #include <fstream>
 using namespace std;
 
-int RDVALUE_ = 1, sh, mov;
+int RDVALUE_ = 1, mov; char sh;
 
 int RD(void) {
     int A;
@@ -12,9 +12,14 @@ int RD(void) {
 
 int main()
 {
-    cin >> sh;
+    cout << "Set mode of Schiffrator:\n"
+         << "0 - random key generation\n"
+         << "1 - manual key setting (encryption mode)\n"
+         << "2 - manual key setting (decryption mode)\n\n";
 
-    if (sh) {
+    while ((sh != '0') and (sh != '1') and (sh != '2')) { cin >> sh; }
+    if (sh == '0') {
+
         ifstream fin("a.txt");
         ofstream fout("b.txt");
 
@@ -38,7 +43,7 @@ int main()
         for (int i = 0; i < leng; i++) { keyout << key[i] << " "; }
     }
 
-    else {
+    else if ((sh == '1') or (sh == '2')) {
         ifstream fin("b.txt");
         ofstream fout("c.txt");
 
@@ -48,7 +53,10 @@ int main()
             sym = fin.get();
             if (!fin.eof()) {
                 cin >> mov;
-                sym -= mov;
+
+                if (sh == '1') sym -= mov;
+                if (sh == '2') sym += mov;
+                
                 fout << sym;
             }
         }
