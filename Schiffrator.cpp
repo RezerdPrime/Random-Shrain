@@ -1,72 +1,56 @@
 #include <iostream>
 #include <fstream>
-#include <cstdlib>
-#include <string>
 using namespace std;
 
-int schiff;
+int RDVALUE_ = 1, sh, mov;
+
+int RD(void) {
+    int A;
+    RDVALUE_ = (RDVALUE_ + (int)(&A)) * 1103515245 + 12345;
+    return RDVALUE_ / 31;
+}
 
 int main()
 {
-    cin >> schiff;
-    if (schiff) {
+    cin >> sh;
 
+    if (sh) {
         ifstream fin("a.txt");
         ofstream fout("b.txt");
 
-        srand(time(NULL));
-
-        auto text = (char*)malloc(sizeof(char));
-        char sym = 1; int index = 0, inversible_bit;
-        string key = "";
+        char sym;
+        int leng = 0; auto key = (int*)malloc(sizeof(int));
 
         while (!fin.eof()) {
-            inversible_bit = rand() % 8; key += to_string(inversible_bit);
-
             sym = fin.get(); //cout << (int)sym << " ";
-            sym ^= 1 << inversible_bit; //cout << (int)sym << endl;
+            if (!fin.eof() or sym != -1) {
+                mov = RD();
+                sym += mov;
+                fout << sym;
 
-            text[index] = sym;
-            index++;
-            text = (char*)realloc(text, sizeof(char) * (index + 1));
+                leng++; key = (int*)realloc(key, (leng + 1) * sizeof(int));
+                key[leng - 1] = mov;
+            }
         }
 
-        for (int i = 0; i < index - 1; i++) {
-            fout << (char)text[i];
-        }
-
-        cout << key << endl;
+        fin.close(); fout.close();
+        ofstream keyout("a.txt");
+        for (int i = 0; i < leng; i++) { keyout << key[i] << " "; }
     }
 
-
     else {
-
         ifstream fin("b.txt");
         ofstream fout("c.txt");
 
-        int number; cin >> number;
-        auto key = (char*)malloc(sizeof(char) * number);
+        char sym;
 
-        for (int i = 0; i < number; i++) {
-            cin >> key[i];
-        }
-
-        auto text = (char*)malloc(sizeof(char));
-        char sym = 1; int index = 0, inversible_bit;
-
-        for (int i = 0; i < number; i++) {
-            inversible_bit = (int)key[i] - 48;
-
-            sym = fin.get(); //cout << (int)sym << " ";
-            sym ^= 1 << inversible_bit; //cout << (int)sym << endl;
-
-            text[index] = sym;
-            index++;
-            text = (char*)realloc(text, sizeof(char) * (index + 1));
-        }
-
-        for (int i = 0; i < index - 1; i++) {
-            fout << (char)text[i];
+        while (!fin.eof()) {
+            sym = fin.get();
+            if (!fin.eof()) {
+                cin >> mov;
+                sym -= mov;
+                fout << sym;
+            }
         }
     }
 }
