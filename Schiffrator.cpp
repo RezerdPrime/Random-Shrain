@@ -14,8 +14,8 @@ int main()
 {
     cout << "Set mode of Schiffrator:\n"
          << "0 - random key generation\n"
-         << "1 - manual key setting (encryption mode)\n"
-         << "2 - manual key setting (decryption mode)\n\n";
+         << "1 - manual key setting (decryption mode)\n"
+         << "2 - manual key setting (encryption mode)\n\n";
 
     while ((sh != '0') and (sh != '1') and (sh != '2')) { cin >> sh; }
     if (sh == '0') {
