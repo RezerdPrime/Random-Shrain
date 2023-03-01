@@ -27,7 +27,7 @@ int main()
         int leng = 0; auto key = (int*)malloc(sizeof(int));
 
         while (!fin.eof()) {
-            sym = fin.get(); //cout << (int)sym << " ";
+            sym = fin.get();
             if (!fin.eof() or sym != -1) {
                 mov = RD() % 256;
                 sym += mov;
@@ -47,17 +47,19 @@ int main()
         ifstream fin("b.txt");
         ofstream fout("c.txt");
 
-        char sym;
+        char sym; int len;
+        cout << "Set the length of key:\n\n";
+        cin >> len;
 
-        while (!fin.eof()) {
+        while (len) {
             sym = fin.get();
-            if (!fin.eof()) {
+            if (len) {
                 cin >> mov;
 
                 if (sh == '1') sym -= mov;
                 if (sh == '2') sym += mov;
                 
-                fout << sym;
+                fout << sym; len--;
             }
         }
     }
