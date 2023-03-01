@@ -20,7 +20,7 @@ int main()
     
     if (sh == '0') {
 
-        ifstream fin("orig.txt");
+        ifstream fin("orig.txt"); if (!fin) return 0;
         ofstream fout("encrypted_codes.txt"),
                  thout("encrypted.txt"),
                  kout("key.txt");
@@ -42,7 +42,7 @@ int main()
     else if (sh == '1') {
 
         ifstream fin("encrypted_codes.txt"),
-                 kin("key.txt");
+                 kin("key.txt"); if (!fin or !kin) return 0;
         ofstream fout("decrypted.txt");
 
         int sym;
