@@ -16,50 +16,46 @@ int main()
          << "0 - random key generation\n"
          << "1 - manual key setting (decryption mode)\n"
          << "2 - manual key setting (encryption mode)\n\n";
-
-    while ((sh != '0') and (sh != '1') and (sh != '2')) { cin >> sh; }
+    while ((sh < 48) or (sh > 50)) { cin >> sh; }
+    
     if (sh == '0') {
 
         ifstream fin("a.txt");
-        ofstream fout("b.txt");
+        ofstream fout("b.txt"),
+                 kout("key.txt");
 
         char sym;
-        int leng = 0; auto key = (int*)malloc(sizeof(int));
 
         while (!fin.eof()) {
             sym = fin.get();
+
             if (!fin.eof() or sym != -1) {
                 mov = RD() % 256;
                 sym += mov;
                 fout << sym;
-
-                leng++; key = (int*)realloc(key, (leng + 1) * sizeof(int));
-                key[leng - 1] = mov;
+                kout << mov << " ";
             }
         }
-
-        fin.close(); fout.close();
-        ofstream keyout("a.txt");
-        for (int i = 0; i < leng; i++) { keyout << key[i] << " "; }
     }
 
     else if ((sh == '1') or (sh == '2')) {
-        ifstream fin("b.txt");
+
+        ifstream fin("b.txt"),
+                 kin("key.txt");
         ofstream fout("c.txt");
 
-        char sym; int len;
-        cout << "Set the length of key:\n\n";
-        cin >> len;
+        char sym;
 
-        while (len) {
-            sym = fin.get();
-            if (len) {
-                cin >> mov;
+        while (!kin.eof()) {
+            kin >> mov;
 
+            if (!kin.eof()) {
+
+                sym = fin.get();
                 if (sh == '1') sym -= mov;
                 if (sh == '2') sym += mov;
-                
-                fout << sym; len--;
+
+                fout << sym;
             }
         }
     }
