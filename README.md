@@ -1,1 +1,1 @@
-I have no idea what the fuck you want in this fucking repository. Just get out.
+В целях сохранения вашего психического состояния рекомендую ливнуть нахуй из этого говна.
