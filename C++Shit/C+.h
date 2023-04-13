@@ -448,7 +448,7 @@ void begin__() { t0__ = clock(); }
 void end__() { 
     t1__ = clock(); 
     double dif__ = (t1__ - t0__) / 1000.;
-    cout("\n", dif__, "\n");
+    cout("\nRuntime value: ", dif__, "\n");
 }
 
 #define START begin__();
