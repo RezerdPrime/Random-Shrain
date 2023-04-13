@@ -3,6 +3,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <time.h>
 
  ///=======================================================================//
 ///			Comfortable stuff
@@ -439,6 +440,22 @@ string replace(string Orig_Str, string Old_Piece, string New_Piece) {
 
 
  ///=======================================================================///
+///			Prog Runtime checking
+
+int t0__ = 0, t1__ = 0;
+
+void begin__() { t0__ = clock(); }
+void end__() { 
+    t1__ = clock(); 
+	   double dif__ = (t1__ - t0__) / 1000.;
+    cout("\n", dif__, "\n");
+}
+
+#define START begin__();
+#define STOP end__();
+
+
+ ///=======================================================================///
 ///			a
 
 
@@ -471,4 +488,7 @@ string replace(string Orig_Str, string Old_Piece, string New_Piece) {
 08.02.2023 - Добавление типа String
              Добавление функции conc() (strcat не фурычит по причинам реализации)
              Добавление функции len() и replace()
+             
+13.04.2023 - Добавление макросов для считывания рантайма куска кода, потому что это удобно
+
 **/
