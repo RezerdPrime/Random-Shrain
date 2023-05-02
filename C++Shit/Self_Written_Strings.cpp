@@ -71,10 +71,18 @@ struct str {
     // String duplication
     str operator*(int a) {
 
-        char* nw = self;
-        str b = nw;
-        for (int i = 0; i < a - 1; i++) b = b + nw;
-        return b;
+        if (!a) return (str)"";
+
+        if (a > 0) {
+            char* nw = self;
+            str b = nw;
+            for (int i = 0; i < a - 1; i++) b = b + nw;
+            return b;
+        }
+
+        if (a == -1) return -((str)self);
+
+        if (a < 0) return -((str)self) * -a;
     }
 
 
@@ -86,9 +94,11 @@ struct str {
 
         if (sh > sz or sh < -sz) return (str)self;
 
-        char* nw = new char[((sh > 0) ? 1 : -1) * sh + 1];
-        for (int i = 0; i < ((sh > 0) ? 1 : -1) * sh; i++) nw[i] = self[((sh > 0) ? i : sz - i - 1)];
-        nw[((sh > 0) ? 1 : -1) * sh] = '\0';
+        int cond = (sh > 0) ? 1 : -1;
+
+        char* nw = new char[cond * sh + 1];
+        for (int i = 0; i < cond * sh; i++) nw[i] = self[((sh > 0) ? i : sz - i - 1)];
+        nw[cond * sh] = '\0';
 
         if (sh > 0) return (str)nw;
         else return -(str)nw;
@@ -138,15 +148,17 @@ struct str {
 
         return (str(self) / index) + nw + (str(self) / -(self_sz - index - old_sz));
     }
-
+    
 private:
     char* self;
 };
 
 
-//int main() {
-//    str a = "foo";
-//    str b = "bar";
-//    cout << (a + b).convert();
-//}
-// оап сасать
+int main() {
+    str a = "foo";
+    str b = "bar";
+
+    //cout << a.self << endl;
+
+    cout << ((a + b) / (a + b).find("a")).replace("b", "d").convert();
+}
