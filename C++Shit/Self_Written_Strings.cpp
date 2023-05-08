@@ -1,8 +1,11 @@
 #include <iostream>
-using namespace	std;
+using namespace std;
 
-struct str {
+class str {
+    friend ostream& operator<<(ostream&, const str&);
+    friend istream& operator>>(istream&, str&);
 
+public:
 
     // Convertation the char in the array of chars
     char* convert(char c) {
@@ -17,6 +20,8 @@ struct str {
     str(char c) : self(convert(c)) {}
     str(const char* s) : self((char*)s) {}
 
+    str() = default;
+
 
     // Lol
     int size() {
@@ -28,13 +33,13 @@ struct str {
 
 
     // Indexed element
-    char operator[](int a) { 
+    char& operator[](int a) {
         int sz = size();
 
-        if (a > 0 and sz) return (char)self[a % sz];
-        if (a < 0) return (char)self[a + sz];
+        if (a > 0 and sz) return self[a % sz];
+        if (a < 0) return self[a + sz];
 
-        return (char)self[0];
+        return *(a + self);
     }
 
 
@@ -130,8 +135,6 @@ struct str {
     // Type "str" convertation to array of the chars
     char* convert() { return self; }
 
-#define cout(s) cout << (s).convert();
-
 
     // The fucking replace
     str replace(str old, str nw) {
@@ -148,17 +151,37 @@ struct str {
 
         return (str(self) / index) + nw + (str(self) / -(self_sz - index - old_sz));
     }
-    
+
+    int count(char c) {
+        int sz = size(), count = 0;
+
+        for (int i = 0; i < sz; i++) {
+            if (self[i] == c) count++;
+        }
+        return count;
+    }
+
 private:
-    char* self;
+    char* self = (char*)"";
 };
 
+std::ostream& operator<<(ostream& out, const str& s) {
+    out << s.self;
+    return out;
+}
 
-int main() {
-    str a = "foo";
-    str b = "bar";
+std::istream& operator>>(istream& in, str& s) {
+    char* a = (char*)malloc(sizeof(char)); int i = 0;
 
-    //cout << a.self << endl;
+    for (i;; i++) {
+        a[i] = cin.get();
 
-    cout << ((a + b) / (a + b).find("a")).replace("b", "d").convert();
+        if (a[i] == '\n') {
+            a[i] = '\0';
+            s = str(a); 
+            return in;
+        }
+
+        a = (char*)realloc(a, sizeof(char) * (i + 2));
+    }
 }
