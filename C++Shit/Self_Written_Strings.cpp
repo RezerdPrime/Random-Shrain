@@ -1,9 +1,6 @@
-#include <iostream>
-using namespace std;
-
 class str {
-    friend ostream& operator<<(ostream&, const str&);
-    friend istream& operator>>(istream&, str&);
+    friend std::ostream& operator<<(std::ostream&, const str&);
+    friend std::istream& operator>>(std::istream&, str&);
 
 public:
 
@@ -26,8 +23,8 @@ public:
     // Lol
     int size() {
 
-        int i;
-        for (i = 0; self[i] != '\0'; i++);
+        int i = 0;
+        while (self[++i]);
         return i;
     }
 
@@ -49,7 +46,7 @@ public:
         int s1 = size();
         int s2 = (s).size();
 
-        char* nw = new char[s1 + s2 + 1];
+        char* nw = new char[s1 + s2 + 1]; //int i = 0, j = 0;
 
         for (int i = 0; i < s1; i++) { nw[i] = self[i]; }
         for (int i = 0; i < s2; i++) { nw[i + s1] = s[i]; }
@@ -165,18 +162,18 @@ private:
     char* self = (char*)"";
 };
 
-std::ostream& operator<<(ostream& out, const str& s) {
+std::ostream& operator<<(std::ostream& out, const str& s) {
     out << s.self;
     return out;
 }
 
-std::istream& operator>>(istream& in, str& s) {
+std::istream& operator>>(std::istream& in, str& s) {
     char* a = (char*)malloc(sizeof(char)); int i = 0;
 
     for (i;; i++) {
-        a[i] = cin.get();
+        a[i] = in.get();
 
-        if (a[i] == '\n') {
+        if (in.eof() or a[i] == '\n') {
             a[i] = '\0';
             s = str(a); 
             return in;
