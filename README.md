@@ -1,1 +1,1 @@
-В целях сохранения вашего психического состояния рекомендую ливнуть нахуй из этого говна.
+In order to preserve your mental state, I recommend that you get the fuck out of this dump.
