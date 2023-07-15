@@ -83,7 +83,7 @@ while cond:
                     pg.draw.rect(screen, COLORBUFF, (0, 0, 130, 40))
 
     pg.draw.rect(screen, COLORBUFF, (0, 0, 130, 40))
-    text_surface = font.render(text, True, (0, 0, 0))
+    text_surface = font.render(text, True, (255 - COLORBUFF[0], 255- COLORBUFF[1], 255 - COLORBUFF[2]))
     screen.blit(text_surface, (10, 10))
     pg.display.flip()
 
