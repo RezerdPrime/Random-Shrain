@@ -1,4 +1,5 @@
 import pygame as pg
+from random import randint
 
 pg.init()
 w = 1600
@@ -55,11 +56,14 @@ while cond:
         if event.type == pg.KEYDOWN:
 
             keys = pg.key.get_pressed()
-            
+
             if keys[pg.K_LALT]:
                 screen.fill((255, 255, 255))
                 screen.blit(screen, (0, 0))
                 pg.display.flip()
+
+            if keys[pg.K_LCTRL]:
+                COLORBUFF = (randint(0,255), randint(0,255), randint(0,255))
 
             if keys[pg.K_LSHIFT]:
                 mode = 2
@@ -82,7 +86,7 @@ while cond:
                     text = ""
                     pg.draw.rect(screen, COLORBUFF, (0, 0, 130, 40))
 
-    pg.draw.rect(screen, COLORBUFF, (0, 0, 130, 40))
+    pg.draw.rect(screen, COLORBUFF, (0, 0, 150, 40))
     text_surface = font.render(text, True, (255 - COLORBUFF[0], 255- COLORBUFF[1], 255 - COLORBUFF[2]))
     screen.blit(text_surface, (10, 10))
     pg.display.flip()
@@ -95,4 +99,5 @@ Left Mouse Button - erasing
 Mouseweel - size changing
 Left ALT - canvas refreshing
 Left Shift - color changing (RGB format)
+Left CTRL - random color setting
 '''
