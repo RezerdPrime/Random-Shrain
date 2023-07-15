@@ -84,10 +84,11 @@ while cond:
                         #print("aaa")
                     except Exception as e: pass
                     text = ""
-                    pg.draw.rect(screen, COLORBUFF, (0, 0, 130, 40))
+                    pg.draw.rect(screen, COLORBUFF, (0, 0, 190, 40))
 
-    pg.draw.rect(screen, COLORBUFF, (0, 0, 150, 40))
-    text_surface = font.render(text, True, (255 - COLORBUFF[0], 255- COLORBUFF[1], 255 - COLORBUFF[2]))
+    pg.draw.rect(screen, COLORBUFF, (0, 0, 190, 40))
+    text_surface = font.render(text + " " + str(k), True,
+                               (255 - COLORBUFF[0], 255 - COLORBUFF[1], 255 - COLORBUFF[2]))
     screen.blit(text_surface, (10, 10))
     pg.display.flip()
 
