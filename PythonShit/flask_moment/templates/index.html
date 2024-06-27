@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.plot.ly/plotly-2.3.1.min.js"></script>
+    <style>
+        #graph {
+            width: 800px;
+            height: 400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="graph"></div>
+
+    <script>
+        function updateData() {
+            fetch('/update')
+            .then(response => response.json())
+            .then(data => {
+                var trace = {
+                    x: data.x,
+                    y: data.y,
+                    mode: 'lines+markers',
+                    type: 'scatter'
+                };
+
+                Plotly.newPlot('graph', [trace]);
+            });
+        }
+
+        // Обновление данных каждые 3 секунды
+        setInterval(updateData, 50);
+    </script>
+</body>
+</html>
