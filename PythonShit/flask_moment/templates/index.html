@@ -4,14 +4,52 @@
     <script src="https://cdn.plot.ly/plotly-2.3.1.min.js"></script>
     <style>
         #graph {
-            width: 800px;
-            height: 400px;
+            border-radius: 22px;
+            border: 6px rgb(6, 125, 172) solid;
+            width: 600px;
+            height: 350px;
+            margin: 0 auto;
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+        }
+        #title {
+            font-family: Verdana, Tahoma, sans-serif;
+            font-size: larger;
+            margin-top: 2em;
+            margin-bottom: 2em;
+            display: flex;
+            justify-content: center;
+        }
+        #foot {
+            border-radius: 22px;
+            border: 6px rgb(6, 125, 172) solid;
+            width: 500px;
+            height: 50px;
+            margin: 0 auto;
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Verdana, Tahoma, sans-serif;
+        }
+        #mid {
+            border-left: 6px rgb(6, 125, 172) solid;
+            border-right: 6px rgb(6, 125, 172) solid;
+            width: 50px;
+            height: 50px;
             margin: 0 auto;
         }
     </style>
+    <!-- препод по вебу ахуела бы увидев это -->
 </head>
 <body>
+
+    <div id="title">График температур</div>
     <div id="graph"></div>
+    <!-- <div style="margin: 20px; color: white"> я автор великих костылей </div> -->
+    <div id="mid"></div>
+    <div id="foot"> хз</div>
 
     <script>
         function updateData() {
@@ -25,7 +63,18 @@
                     type: 'scatter'
                 };
 
-                Plotly.newPlot('graph', [trace]);
+                var layout = {
+                    xaxis: {fixedrange: true},
+                    yaxis: {fixedrange: true},
+                    staticPlot: true
+                };
+
+                var config = {
+                    displayModeBar: false,
+                    displaylogo: false
+                };
+
+                Plotly.newPlot('graph', [trace], layout, config);
             });
         }
 
