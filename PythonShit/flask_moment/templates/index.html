@@ -2,14 +2,25 @@
 <html>
 <head>
     <script src="https://cdn.plot.ly/plotly-2.3.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         #graph {
-            border-radius: 22px;
-            border: 6px rgb(6, 125, 172) solid;
             width: 600px;
             height: 350px;
             margin: 0 auto;
             padding: 5px;
+            display: flex;
+            justify-content: center;
+        }
+        #graph_outer{
+            width: 650px;
+            height: 400px;
+            border-radius: 22px;
+            border: 6px rgb(6, 125, 172) solid;
+            padding: 5px;
+            margin: 0 auto;
             display: flex;
             justify-content: center;
         }
@@ -40,22 +51,47 @@
             height: 50px;
             margin: 0 auto;
         }
+        #accordionik {
+            width: 400px;
+            margin: 0 auto;
+        }
     </style>
-    <!-- препод по вебу ахуела бы увидев это -->
 </head>
 <body>
 
     <div id="title">График температур</div>
-    <div id="graph"></div>
-    <!-- <div style="margin: 20px; color: white"> я автор великих костылей </div> -->
+    <div id="graph_outer"><div id="graph"></div></div>
     <div id="mid"></div>
-    <div id="foot"> хз</div>
+    <div id="foot"></div>
+    <div style="margin: 20px; color: white"> я автор великих костылей </div>
+    <div class="accordion" id="accordionik">
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                История данных
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionik">
+                <div class="accordion-body" id="history"></div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function updateData() {
             fetch('/update')
             .then(response => response.json())
             .then(data => {
+                var connected_mk = data.cmk;
+                document.getElementById("foot").innerText = "Количество подключенных устройств: " + connected_mk.toString();
+
+                var time = data.time;
+                var outputDiv = document.getElementById("history");
+                var paragraph = document.createElement('p');
+                paragraph.textContent = data.y[data.y.length-1].toFixed(2).toString() + "" + time.toFixed(2).toString();
+                outputDiv.appendChild(paragraph);
+
                 var trace = {
                     x: data.x,
                     y: data.y,
@@ -78,7 +114,6 @@
             });
         }
 
-        // Обновление данных каждые 3 секунды
         setInterval(updateData, 50);
     </script>
 </body>
