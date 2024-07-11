@@ -55,6 +55,23 @@
             width: 400px;
             margin: 0 auto;
         }
+        #addshit {
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            height: 50px;
+        }
+        #history {
+            text-align: center;
+        }
+        #history p {
+            margin: 10px 0;
+        }
+        hr {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -64,6 +81,9 @@
     <div id="mid"></div>
     <div id="foot"></div>
     <div style="margin: 20px; color: white"> я автор великих костылей </div>
+
+<!--    <div id="hui"></div>-->
+
     <div class="accordion" id="accordionik">
 
         <div class="accordion-item">
@@ -72,7 +92,9 @@
                 История данных
                 </button>
             </h2>
+
             <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionik">
+                <button onclick="updateData2()" id="addshit" class="btn btn-outline-light text-secondary">Добавить записи</button>
                 <div class="accordion-body" id="history"></div>
             </div>
         </div>
@@ -85,12 +107,6 @@
             .then(data => {
                 var connected_mk = data.cmk;
                 document.getElementById("foot").innerText = "Количество подключенных устройств: " + connected_mk.toString();
-
-                var time = data.time;
-                var outputDiv = document.getElementById("history");
-                var paragraph = document.createElement('p');
-                paragraph.textContent = data.y[data.y.length-1].toFixed(2).toString() + "" + time.toFixed(2).toString();
-                outputDiv.appendChild(paragraph);
 
                 var trace = {
                     x: data.x,
@@ -114,7 +130,39 @@
             });
         }
 
-        setInterval(updateData, 50);
+        setInterval(updateData, 1000);
+    </script>
+
+    <script>
+        var k = 10;
+
+        function updateData2() {
+            fetch('/update')
+            .then(response => response.json())
+            .then(data => {
+                var time = data.time;
+                var temp = data.temp;
+
+                var outputDiv = document.getElementById("history");
+
+                // document.getElementById("hui").innerText = k.toString() + " " + temp.length.toString();
+
+                if ((time.length >= k) && (temp.length >= k)) {
+
+                    var hr = document.createElement('hr');
+                    outputDiv.appendChild(hr);
+
+                    for (var i=0; i<10; i++) {
+                        var paragraph = document.createElement('p');
+                        paragraph.textContent = temp[k + i].toFixed(4).toString() + " " + time[k + i].toFixed(4).toString();
+                        outputDiv.appendChild(paragraph);
+                    }
+
+                    k += 10;
+                }
+
+            });
+        }
     </script>
 </body>
 </html>
