@@ -16,37 +16,6 @@ img = Image.new("RGB", (width, height))
 w = 1+1j
 
 
-def frac(N_):
-    global w
-
-    for x in range(width):
-        for y in range(height):
-
-            z = complex((x - width/2)/scale + X, (height/2 - y)/scale + Y)
-            w = z
-
-            for _ in range(N_):
-                try:
-                    z = cmath.sin(z) + w
-                except (ZeroDivisionError, OverflowError): ...
-
-            try:
-                zmod = abs(z)
-                zarg = cmath.phase(z)
-
-                if (zmod < 2) and (img.getpixel((x,y)) == (0,0,0)):
-                    h = 1 / math.tau * zarg + (zarg < 0)
-                    s = 1-math.tanh(zmod/3)
-                    v = math.tanh(zmod)
-
-                    col = cs.hsv_to_rgb(h, s, v)
-                    col = tuple(round(c*253) + 1 for c in col)
-
-                    img.putpixel((x,y), col)
-
-            except OverflowError: ...
-
-
 def Fractal(N_, I):
     global w
 
@@ -86,6 +55,7 @@ def Fractal(N_, I):
                     img.putpixel((x,y), col)
 
             except OverflowError: ...
+
 
 def frame(index):
     global img, start, end
