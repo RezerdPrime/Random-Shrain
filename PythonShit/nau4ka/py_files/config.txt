@@ -1,0 +1,35 @@
+dmm1:
+v=0.5, s=0.5, xy0=(3,3), h=100
+
+dmm2:
+v=0.2, s=0.5, xy0=(3,3), h=100
+
+dmm3:
+v=0.2, s=0.7, xy0=(3,3), h=100
+
+dmm4:
+v=0.5, s=0.5, xy0=(3,3), h=1000
+
+dmm5:
+v=0.5, s=0.5, xy0=(3,3), h=500
+
+dmm_other_model:
+v=0.1, s= - , xy0=(0.1, 0.1), h=200
+
+dmm6:
+v=0.1, s=0.5, xy0=(0.1, 0.1), h=200
+
+ap_other_model:
+v=0.1, s= - , a=20, rho=10, h=200, mx = my = 2
+
+attraction_pool:
+v=0.1, s=0.5, a=20, rho=10, h=100, mx = my = 2
+
+ap2:
+v=0.1, s=0.5, a=2, rho=1, h=200, mx = my = 80
+
+ap2_othermodel:
+v=0.1, s=0.5, a=2, rho=1, h=100, mx = my = 80
+
+dmm7:
+v=0.5, s=0.5, xy0=(3,3), h=200, mx = my = 120
