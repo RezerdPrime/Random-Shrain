@@ -96,7 +96,7 @@ def frame(I):
             DrawCurve(RungeKutt(I/25, 100, (x,y)), arg)
 
     #img.save(f"fr\\{I}.png")
-    img.save("hui.png")
+    img.save("pic.png")
 
     start = end
     end = time.time()
